@@ -1,14 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Menu from '../molecules/Menu'
+import { MenuItem, Menu }  from '../src/molecules/Menu'
 
 export default function App() {
+  const menuItems: MenuItem[] = [
+    { text: '  {Planned Activity}', link: 'activity' },
+    { text: '  {adhoc Activity}', link: 'activity' },
+    { text: '  Log Sleep', link: 'sleep' },
+    { text: '  Log Food', link: 'food' },
+  ]
   return (
     <View>
-        <Menu title={'Gains'} items={["Log Activity", "Fart a lot"]} />
-        <StatusBar style="auto" />
+        <Text>Today</Text>
+        <Menu items={menuItems} />
+        <Text>This week</Text>
+        <Text>This cycle</Text>
+        <Text> New Cycle</Text>
+        <Text>Stats</Text>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -18,4 +27,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+})
