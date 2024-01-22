@@ -1,13 +1,16 @@
 import { Text, View, Button } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StackedParams } from './types';
+import { Link } from "expo-router";
 
-export default function Menu({navigation, route}: NativeStackScreenProps<StackedParams, 'Menu'>) {
-  const params = route.params;
+type MenuParams = {
+  title: string,
+  items: string[]
+}
+
+export default function Menu(params: MenuParams) {
   return (
     <View>
       <Text>{params.title}</Text>
-      {params.items.map((item) => { return (<Button title={item} onPress={() => navigation.navigate('Entry')}/>)})}
+      {params.items.map((item) => { return (<Link key={item} href="/other?input=testtttt">{item}</Link>) })}
     </View>
   );
 }
