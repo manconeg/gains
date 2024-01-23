@@ -1,7 +1,10 @@
-import { Slot } from 'expo-router'
+import { Slot, Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import { useContext } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
+import { PaperProvider, useTheme } from 'react-native-paper'
+import { TitleContext } from '../src/TitleContext'
 
 type LayoutParams = {
   input: string
@@ -9,22 +12,36 @@ type LayoutParams = {
 
 export default function HomeLayout() {
   const params = useLocalSearchParams<LayoutParams>()
+  const theme = useTheme();
+  const context = useContext(TitleContext)
 
   return (
-    <View>
-      <View style={styles.header}><Text>{params.input ?? 'Gains'}</Text></View>
-      <View style={styles.container}><Slot /></View>
+    <PaperProvider>
+      <Stack screenOptions={{
+        headerStyle: {...styles.header, backgroundColor: theme.colors.primary},
+        headerTintColor: theme.colors.primaryContainer,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+        contentStyle: {...styles.container, backgroundColor: theme.colors.secondary}
+      }} />
       <StatusBar style="auto" />
-    </View>)
+    </PaperProvider>)
+    // return (
+    //   <PaperProvider>
+    //     <View>
+    //       <View style={{...styles.header, backgroundColor: theme.colors.primary}}><Text>{context ?? 'Gains'}</Text></View>
+    //       <View style={{...styles.container, backgroundColor: theme.colors.secondary}}><Slot /></View>
+    //       <StatusBar style="auto" />
+    //     </View>
+    //   </PaperProvider>)
 }
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#333',
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },

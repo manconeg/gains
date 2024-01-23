@@ -1,45 +1,52 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, ScrollView, View } from 'react-native'
 import { MenuItem, Menu } from '../../src/molecules/Menu'
+import { Graph } from '../../src/molecules/Graph'
+import { Stack } from 'expo-router';
+import { Counterr } from '../../src/atoms/Counter';
 
 export default function App() {
   return (
-    <View>
-        <View>Deadlift</View>
-        <View>180 TM</View>
-        <View>220 PR</View>
-        <View>230 PR calc</View>
-        <View><View>5/5/5</View><View>3/3/3</View><View>5x5</View></View>
+    <ScrollView style={{flex: 1}}>
+        <Stack.Screen options={{title: 'Deadlift',}}/>
         <View>
-            <View>Upcoming Sets</View>
+          <Text>Training Max</Text>
+          <Counterr number={180} />
+        </View>
+        <Text>220 PR</Text>
+        <Text>230 PR calc</Text>
+        <Graph data={[5, 2, 8, 2, 6, 8, 9, 10]}/>
+        <View><Text>5/5/5</Text><Text>3/3/3</Text><Text>5x5</Text></View>
+        <View>
+            <Text>Upcoming Sets</Text>
             <View>
-                <View>100 50%</View>
-                <View>x5</View>
-                <View>45 35 25 1</View>
+                <Text>100 50%</Text>
+                <Text>x5</Text>
+                <Text>45 35 25 1</Text>
             </View>
             <View>
-                <View>100 50%</View>
-                <View>x5+</View>
-                <View>PR 8</View>
-                <View>Beat calc PR 8</View>
-                <View>45 35 25 1</View>
+                <Text>100 50%</Text>
+                <Text>x5+</Text>
+                <Text>PR 8</Text>
+                <Text>Beat calc PR 8</Text>
+                <Text>45 35 25 1</Text>
             </View>
             <View>
-                <View>New Set</View>
-                <View>Weight Select</View>
-                <View>Percent Slider</View>
-                <View>Type weight</View>
-                <View>Add</View>
+                <Text>New Set</Text>
+                <Text>Weight Select</Text>
+                <Text>Percent Slider</Text>
+                <Text>Type weight</Text>
+                <Text>Add</Text>
             </View>
         </View>
         <View>
-            <View>Complete Sets</View>
+            <Text>Complete Sets</Text>
             <View>
-                <View>Edit</View>
-                <View>130 65%</View>
-                <View>5 of 5</View>
+                <Text>Edit</Text>
+                <Text>130 65%</Text>
+                <Text>5 of 5</Text>
             </View>
         </View>
-    </View>
+    </ScrollView>
   );
 }
 

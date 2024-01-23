@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { MenuItem, Menu } from '../../src/molecules/Menu'
+import { Stack } from 'expo-router';
 
 export default function App() {
   const menuItems: MenuItem[] = [
@@ -9,6 +10,7 @@ export default function App() {
 
   return (
     <View>
+        <Stack.Screen options={{title: 'Activites',}}/>
         <Menu items={menuItems} />
     </View>
   );
