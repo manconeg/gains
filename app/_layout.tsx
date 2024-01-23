@@ -4,7 +4,6 @@ import { useContext } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import { PaperProvider, useTheme } from 'react-native-paper'
-import { TitleContext } from '../src/TitleContext'
 
 type LayoutParams = {
   input: string
@@ -13,7 +12,6 @@ type LayoutParams = {
 export default function HomeLayout() {
   const params = useLocalSearchParams<LayoutParams>()
   const theme = useTheme();
-  const context = useContext(TitleContext)
 
   return (
     <PaperProvider>

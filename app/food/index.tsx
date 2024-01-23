@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { MenuItem, Menu } from '../../src/molecules/Menu'
+import { MenuItem, Menu } from '@/molecules'
 
 export default function App() {
   const menuItems: MenuItem[] = [

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { MenuItem, Menu } from '../../src/molecules/Menu'
+import { MenuItem, Menu } from '@/molecules'
 import { Stack } from 'expo-router';
 
 export default function App() {

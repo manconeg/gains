@@ -1,27 +1,31 @@
 import { StyleSheet, Text, ScrollView, View } from 'react-native'
 import { MenuItem, Menu } from '../../src/molecules/Menu'
-import { Graph } from '../../src/molecules/Graph'
+import { Graph } from '@/molecules'
 import { Stack } from 'expo-router';
-import { Counterr } from '../../src/atoms/Counter';
-import { Movement } from '../../src/molecules/Movement';
+import { Adjustable } from '@/atoms';
+import { Set } from '@/molecules';
 
 export default function App() {
   return (
-    <ScrollView style={{flex: 1}}>
+    <ScrollView>
         <Stack.Screen options={{title: 'Deadlift',}}/>
-        <View>
+        <View style={{flexDirection: 'row'}}>
           <Text>Training Max</Text>
-          <Counterr number={180} />
+          <Adjustable number={180} />
         </View>
-        <Text>220 PR</Text>
-        <Text>230 PR calc</Text>
-        <Graph data={[5, 2, 8, 2, 6, 8, 9, 10]}/>
-        <View><Text>5/5/5</Text><Text>3/3/3</Text><Text>5x5</Text></View>
+        <View style={{flexDirection: 'row'}}>
+          <Text>220 PR </Text>
+          <Text>230 PR calc</Text>
+        </View>
+        <View>
+          <Text>Progress</Text>
+          <Graph data={[5, 2, 8, 2, 6, 8, 9, 10]}/>
+        </View>
         <View>
             <Text>Upcoming Sets</Text>
-            <Movement weight={100} percent={.5} reps={5} amrap={false} />
-            <Movement weight={110} percent={.6} reps={5} amrap={false} />
-            <Movement weight={120} percent={.7} reps={3} amrap={false} />
+            <Set weight={100} percent={.5} reps={5} amrap={false} />
+            <Set weight={110} percent={.6} reps={5} amrap={false} />
+            <Set weight={120} percent={.7} reps={3} amrap={false} />
             <View>
                 <Text>New Set</Text>
                 <Text>Weight Select</Text>
