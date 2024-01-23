@@ -8,7 +8,7 @@ type PlateCalculatorParams = {
 export function PlateCalculator({weight, plates = [45, 25, 10, 5, 2.5]}: PlateCalculatorParams) {
     const set: Array<number> = new Array()
 
-    let weightLeft = weight
+    let weightLeft = weight / 2
     plates.sort((x, y) => y - x).forEach((plate) => {
         let num = Math.floor(weightLeft / plate)
         while (num--)

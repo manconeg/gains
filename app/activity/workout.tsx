@@ -2,16 +2,18 @@ import { StyleSheet, Text, ScrollView, View } from 'react-native'
 import { MenuItem, Menu } from '../../src/molecules/Menu'
 import { Graph } from '@/molecules'
 import { Stack } from 'expo-router';
+import { useState } from 'react';
 import { Adjustable } from '@/atoms';
 import { Set } from '@/molecules';
 
-export default function App() {
+export default function Workout() {
+  const [trainingMax, setTrainingMax] = useState(180)
   return (
     <ScrollView>
         <Stack.Screen options={{title: 'Deadlift',}}/>
         <View style={{flexDirection: 'row'}}>
           <Text>Training Max</Text>
-          <Adjustable number={180} />
+          <Adjustable number={trainingMax} onChange={(number, type) => setTrainingMax(number)} />
         </View>
         <View style={{flexDirection: 'row'}}>
           <Text>220 PR </Text>
@@ -23,9 +25,9 @@ export default function App() {
         </View>
         <View>
             <Text>Upcoming Sets</Text>
-            <Set weight={100} percent={.5} reps={5} amrap={false} />
-            <Set weight={110} percent={.6} reps={5} amrap={false} />
-            <Set weight={120} percent={.7} reps={3} amrap={false} />
+            <Set weight={{max: trainingMax, percent: .5}} reps={5} amrap={false} />
+            <Set weight={110} reps={5} amrap={false} />
+            <Set weight={120} reps={3} amrap={false} />
             <View>
                 <Text>New Set</Text>
                 <Text>Weight Select</Text>

@@ -3,14 +3,12 @@ import Counter from 'react-native-counters';
 type AdjustableParams = {
     number: number,
     formatFn?: (count: number) => string,
+    onChange?: (number: number, type: string) => void,
+    increment?: number,
   }
 
 export function Adjustable(params: AdjustableParams) {
-    const onChange = (number: number, type: string) => {
-      console.log(number, type) // 1, + or -
-    }
-    
     return (
-        <Counter start={params.number} onChange={onChange} formatFn={params.formatFn} />
+        <Counter max={1000} start={params.number} increment={params.increment} onChange={params.onChange} formatFn={params.formatFn} />
       )
   }
