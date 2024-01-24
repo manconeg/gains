@@ -1,7 +1,7 @@
-import { Text, View, Button } from 'react-native'
+import { View, Button } from 'react-native'
 import { Adjustable } from '@/atoms';
 import { PlateCalculator } from '@/molecules/PlateCalculator';
-import { Checkbox } from 'react-native-paper';
+import { Text, Checkbox } from 'react-native-paper';
 import { useEffect, useState } from 'react'
 
 type TrainingMaxWeight = {

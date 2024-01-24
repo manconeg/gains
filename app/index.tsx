@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { LiftCard } from '@/atoms';
 import { MenuItem, Menu }  from '@/molecules'
 import { Slot, Stack } from 'expo-router'
+import { Divider, Text } from 'react-native-paper';
 
 export default function App() {
   const menuItems: MenuItem[] = [
@@ -60,25 +61,27 @@ export default function App() {
   return (
     <View style={styles.container}>
         <Stack.Screen options={{title: 'In Thickness',}}/>
-        <Text style={styles.header}>Today</Text>
-        <LiftCard workout={todayWorkout}/>
-        <Text style={styles.header}>Complete</Text>
-        <LiftCard workout={completeWorkout}/>
+        <Text>Today</Text>
+        <Divider />
+        <View style={styles.movement}>
+            <LiftCard workout={todayWorkout}/>
+            <LiftCard workout={completeWorkout}/>
+        </View>
         <Menu items={menuItems} />
-        <Text style={styles.header}>This week</Text>
-        <Text style={styles.header}>This cycle</Text>
+        <Text>This week</Text>
+        <Divider />
+        <Text>This cycle</Text>
+        <Divider />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  header: {
-    borderColor: 'black',
-    borderStyle: 'solid',
-    borderBottomWidth: 1,
-  },
   container: {
     flex: 1,
-    width: '100%',
+  },
+  movement: {
+    // backgroundColor: 'black',
+    alignItems: 'center',
   },
 })

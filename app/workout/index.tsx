@@ -1,5 +1,5 @@
-import { StyleSheet, Text, ScrollView, View } from 'react-native'
-import { MenuItem, Menu } from '../../src/molecules/Menu'
+import { StyleSheet, ScrollView, View } from 'react-native'
+import { Text } from 'react-native-paper'
 import { Graph } from '@/molecules'
 import { Stack } from 'expo-router';
 import { useState } from 'react';
