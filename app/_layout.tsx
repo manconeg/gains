@@ -19,14 +19,6 @@ export default function HomeLayout() {
       }} />
       <StatusBar style="auto" />
     </PaperProvider>)
-    // return (
-    //   <PaperProvider>
-    //     <View>
-    //       <View style={{...styles.header, backgroundColor: theme.colors.primary}}><Text>{context ?? 'Gains'}</Text></View>
-    //       <View style={{...styles.container, backgroundColor: theme.colors.secondary}}><Slot /></View>
-    //       <StatusBar style="auto" />
-    //     </View>
-    //   </PaperProvider>)
 }
 
 const styles = StyleSheet.create({

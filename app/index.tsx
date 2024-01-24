@@ -9,11 +9,35 @@ export default function App() {
     { text: '  Log Sleep', link: 'sleep' },
     { text: '  Log Food', link: 'food' },
   ]
+
+  const todayWorkout = {
+        date: new Date(2023, 2, 23),
+        movement: {
+            name: "Bench Press",
+            max: 240 * .9,
+        },
+        sets: [
+            {
+                reps: 5,
+                amrap: false,
+                percent: .75,
+            }, {
+                reps: 3,
+                amrap: false,
+                percent: .85,
+            }, {
+                reps: 1,
+                amrap: true,
+                percent: .95,
+            }
+        ]
+    }
+
   return (
     <View style={styles.container}>
         <Stack.Screen options={{title: 'In Thickness',}}/>
         <Text style={styles.header}>Today</Text>
-        <LiftCard />
+        <LiftCard workout={todayWorkout}/>
         <Menu items={menuItems} />
         <Text style={styles.header}>This week</Text>
         <Text style={styles.header}>This cycle</Text>
