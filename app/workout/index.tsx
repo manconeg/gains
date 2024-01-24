@@ -5,9 +5,18 @@ import { Stack } from 'expo-router';
 import { useState } from 'react';
 import { Adjustable } from '@/atoms';
 import { Set } from '@/molecules';
+import { useLocalSearchParams } from 'expo-router'
+
+type WorkoutParams = {
+  id: string
+}
 
 export default function Workout() {
+  const params = useLocalSearchParams<WorkoutParams>()
+
   const [trainingMax, setTrainingMax] = useState(180)
+  const [useTrainingMax, setUseTrainingMax] = useState(true)
+  
   return (
     <ScrollView>
         <Stack.Screen options={{title: 'Deadlift',}}/>

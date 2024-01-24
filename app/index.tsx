@@ -1,30 +1,34 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { LiftCard } from '@/atoms';
 import { MenuItem, Menu }  from '@/molecules'
+import { Slot, Stack } from 'expo-router'
 
 export default function App() {
   const menuItems: MenuItem[] = [
-    { text: '  {Planned Activity}', link: 'activity' },
-    { text: '  {adhoc Activity}', link: 'activity' },
+    { text: '  {Log Workout}', link: 'workout' },
     { text: '  Log Sleep', link: 'sleep' },
     { text: '  Log Food', link: 'food' },
   ]
   return (
-    <View>
-        <Text>Today</Text>
+    <View style={styles.container}>
+        <Stack.Screen options={{title: 'In Thickness',}}/>
+        <Text style={styles.header}>Today</Text>
+        <LiftCard />
         <Menu items={menuItems} />
-        <Text>This week</Text>
-        <Text>This cycle</Text>
-        <Text> New Cycle</Text>
-        <Text>Stats</Text>
+        <Text style={styles.header}>This week</Text>
+        <Text style={styles.header}>This cycle</Text>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  header: {
+    borderColor: 'black',
+    borderStyle: 'solid',
+    borderBottomWidth: 1,
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: '100%',
   },
 })

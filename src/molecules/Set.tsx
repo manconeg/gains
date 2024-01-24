@@ -15,11 +15,15 @@ export type SetParams = {
   amrap: boolean,
 }
 
+function calcWeight(max: number, percent: number)
+{
+  return Math.ceil((max * percent) / 5) * 5
+}
+
 export function Set(params: SetParams) {
   const [checked, setChecked] = useState(false);
-
-  const [percent, setPercent] = useState(0)
   const [isTrainingMax, setTrainingMax] = useState(typeof params.weight === "number")
+  const [percent, setPercent] = useState(0)
   const [weight, setWeight] = useState(0)
 
   useEffect(() => {
@@ -43,7 +47,7 @@ export function Set(params: SetParams) {
     }
     else
     {
-      setWeight(Math.ceil((params.weight.max * percent) / 5) * 5)
+      setWeight(calcWeight(params.weight.max, percent))
     }
   }, [percent])
 

@@ -2,15 +2,9 @@ import { Slot, Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useContext } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { useLocalSearchParams } from 'expo-router'
 import { PaperProvider, useTheme } from 'react-native-paper'
 
-type LayoutParams = {
-  input: string
-}
-
 export default function HomeLayout() {
-  const params = useLocalSearchParams<LayoutParams>()
   const theme = useTheme();
 
   return (
@@ -19,7 +13,7 @@ export default function HomeLayout() {
         headerStyle: {...styles.header, backgroundColor: theme.colors.primary},
         headerTintColor: theme.colors.primaryContainer,
         headerTitleStyle: {
-          fontWeight: 'bold',
+          // fontWeight: 'bold',
         },
         contentStyle: {...styles.container, backgroundColor: theme.colors.secondary}
       }} />
@@ -37,6 +31,7 @@ export default function HomeLayout() {
 
 const styles = StyleSheet.create({
   header: {
+    borderBottomWidth: 0,
   },
   container: {
     flex: 1,
