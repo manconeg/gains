@@ -1,2 +1,2 @@
 export { Adjustable } from './Adjustable'
-export { LiftCard } from './LiftCard'
+export { LiftCard } from '../molecules/LiftCard'
