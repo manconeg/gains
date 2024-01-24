@@ -11,7 +11,7 @@ export const workouts = [{
     complete: false,
     movements: [{
         name: "Bench Press",
-        max: 240 * .9,
+        max: 240,
         sets: [
             {
                 reps: 5,
@@ -36,7 +36,7 @@ export const workouts = [{
       complete: true,
       movements: [{
           name: "Deadlift",
-          max: 400 * .9,
+          max: 400,
           sets: [
               {
                   reps: 5,

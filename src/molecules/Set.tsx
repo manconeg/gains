@@ -13,6 +13,7 @@ export type SetParams = {
   weight: number | TrainingMaxWeight,
   reps: number,
   amrap: boolean,
+  complete: boolean,
 }
 
 function calcWeight(max: number, percent: number)
@@ -21,7 +22,7 @@ function calcWeight(max: number, percent: number)
 }
 
 export function Set(params: SetParams) {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(params.complete);
   const [isTrainingMax, setTrainingMax] = useState(typeof params.weight === "number")
   const [percent, setPercent] = useState(0)
   const [weight, setWeight] = useState(0)

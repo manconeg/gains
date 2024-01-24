@@ -2,24 +2,25 @@ import { StyleSheet, ScrollView, View } from 'react-native'
 import { Text } from 'react-native-paper'
 import { Graph } from '@/molecules'
 import { Stack } from 'expo-router';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Adjustable } from '@/atoms';
 import { Set } from '@/molecules';
 import { useLocalSearchParams } from 'expo-router'
-
-type WorkoutParams = {
-  id: string
-}
+import { WorkoutContext } from '@/contexts/WorkoutContext';
 
 export default function Workout() {
-  const params = useLocalSearchParams<WorkoutParams>()
+  const workouts = useContext(WorkoutContext);
+  const { workoutId } = useLocalSearchParams<{workoutId: string}>();
+  // const params = useLocalSearchParams<WorkoutParams>()
+  
+  const workout = workouts[Number(workoutId)]
+  const movement = workout.movements[0]
 
-  const [trainingMax, setTrainingMax] = useState(180)
-  const [useTrainingMax, setUseTrainingMax] = useState(true)
+  const [trainingMax, setTrainingMax] = useState(movement.max)
   
   return (
     <ScrollView>
-        <Stack.Screen options={{title: 'Deadlift',}}/>
+        <Stack.Screen options={{title: movement.name,}}/>
         <View style={{flexDirection: 'row'}}>
           <Text>Training Max</Text>
           <Adjustable number={trainingMax} onChange={(number, type) => setTrainingMax(number)} />
@@ -34,9 +35,7 @@ export default function Workout() {
         </View>
         <View>
             <Text>Upcoming Sets</Text>
-            <Set weight={{max: trainingMax, percent: .5}} reps={5} amrap={false} />
-            <Set weight={110} reps={5} amrap={false} />
-            <Set weight={120} reps={3} amrap={false} />
+            {movement.sets.map((set, key) => <Set key={key} weight={{max: movement.max, percent: set.percent}} reps={5} amrap={set.amrap} complete={set.complete} />)}
             <View>
                 <Text>New Set</Text>
                 <Text>Weight Select</Text>

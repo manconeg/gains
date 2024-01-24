@@ -16,11 +16,11 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-        <Stack.Screen options={{title: 'In Thickness',}}/>
+        <Stack.Screen options={{title: 'In Thickness (and in health)',}}/>
         <Text>Today</Text>
         <Divider />
         <View style={styles.movement}>
-            {workouts.map((workout, key) => <LiftCard key={key} workout={workout}/>)}
+            {workouts.map((workout, key) => <LiftCard key={key} id={key} workout={workout}/>)}
         </View>
         <Menu items={menuItems} />
         <Text>This week</Text>
