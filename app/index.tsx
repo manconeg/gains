@@ -3,6 +3,8 @@ import { LiftCard } from '@/atoms';
 import { MenuItem, Menu }  from '@/molecules'
 import { Slot, Stack } from 'expo-router'
 import { Divider, Text } from 'react-native-paper';
+import { WorkoutContext } from '@/contexts/WorkoutContext';
+import { useContext } from 'react';
 
 export default function App() {
   const menuItems: MenuItem[] = [
@@ -10,53 +12,7 @@ export default function App() {
     { text: '  Log Sleep', link: 'sleep' },
     { text: '  Log Food', link: 'food' },
   ]
-
-  const todayWorkout = {
-        date: new Date(2023, 2, 23),
-        movements: [{
-            name: "Bench Press",
-            max: 240 * .9,
-            sets: [
-                {
-                    reps: 5,
-                    amrap: false,
-                    percent: .75,
-                }, {
-                    reps: 3,
-                    amrap: false,
-                    percent: .85,
-                }, {
-                    reps: 1,
-                    amrap: true,
-                    percent: .95,
-                }
-            ]
-        },]
-    }
-
-    const completeWorkout = {
-          date: new Date(2023, 2, 23),
-          complete: true,
-          movements: [{
-              name: "Bench Press",
-              max: 240 * .9,
-              sets: [
-                  {
-                      reps: 5,
-                      amrap: false,
-                      percent: .75,
-                  }, {
-                      reps: 3,
-                      amrap: false,
-                      percent: .85,
-                  }, {
-                      reps: 1,
-                      amrap: true,
-                      percent: .95,
-                  }
-              ]
-          },]
-      }
+  const workouts = useContext(WorkoutContext);
 
   return (
     <View style={styles.container}>
@@ -64,8 +20,7 @@ export default function App() {
         <Text>Today</Text>
         <Divider />
         <View style={styles.movement}>
-            <LiftCard workout={todayWorkout}/>
-            <LiftCard workout={completeWorkout}/>
+            {workouts.map((workout, key) => <LiftCard key={key} workout={workout}/>)}
         </View>
         <Menu items={menuItems} />
         <Text>This week</Text>

@@ -8,11 +8,11 @@ export type Set = {
     reps: number,
     amrap: boolean,
     percent: number,
-    complete: true,
+    complete: boolean,
 }
 
 export type Workout = {
     date: Date,
     movements: Movement[],
-    complete: true,
+    complete: boolean,
 }
