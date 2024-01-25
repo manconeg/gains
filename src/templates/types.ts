@@ -9,7 +9,7 @@ type Variation = {
     workouts: Workout[],
     name: string,
 }
-  
+
 type WorkoutStructure = {
     name: string,
     variations: Variation[],
@@ -103,7 +103,7 @@ const startingStrength: ProgramTemplate = {
                         }
                     ]
                 },
-                
+
             ]
         },
     ]
@@ -172,8 +172,8 @@ const fiveThreeOne: ProgramTemplate = {
                                     percent: 75,
                                     amrap: true,
                                 },
-                                ]
-                            }
+                            ]
+                        }
                         ]
                     }, {
                         name: '3s',
@@ -203,19 +203,19 @@ const fiveThreeOne: ProgramTemplate = {
         },
     ]
 }
-  
+
 const data = {
     workouts: {
-      date: '',
-      template: '',
-      movement: 'deadlift',
-      status: 'complete',
-      sets: [
-        {
-          reps: 5,
-          weight: 180,
-        }
-      ],
+        date: '',
+        template: '',
+        movement: 'deadlift',
+        status: 'complete',
+        sets: [
+            {
+                reps: 5,
+                weight: 180,
+            }
+        ],
     },
     food: {
 

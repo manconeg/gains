@@ -1,8 +1,8 @@
-import { View, Button } from 'react-native'
 import { Adjustable } from '@/atoms';
 import { PlateCalculator } from '@/molecules/PlateCalculator';
-import { Text, Checkbox, Card } from 'react-native-paper';
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import { Card, Checkbox, Text } from 'react-native-paper';
 
 type TrainingMaxWeight = {
   max: number,
@@ -16,8 +16,7 @@ export type SetParams = {
   complete: boolean,
 }
 
-function calcWeight(max: number, percent: number)
-{
+function calcWeight(max: number, percent: number) {
   return Math.ceil((max * percent) / 5) * 5
 }
 
@@ -28,13 +27,11 @@ export function Set(params: SetParams) {
   const [weight, setWeight] = useState(0)
 
   useEffect(() => {
-    if(typeof params.weight === "number")
-    {
+    if (typeof params.weight === "number") {
       setTrainingMax(false)
       setWeight(params.weight)
     }
-    else
-    {
+    else {
       setTrainingMax(true)
       setPercent(params.weight.percent)
       setWeight(params.weight.max * percent)
@@ -42,26 +39,24 @@ export function Set(params: SetParams) {
   }, [params])
 
   useEffect(() => {
-    if(typeof params.weight === "number")
-    {
+    if (typeof params.weight === "number") {
       setWeight(params.weight)
     }
-    else
-    {
+    else {
       setWeight(calcWeight(params.weight.max, percent))
     }
   }, [percent])
 
   return (
-  <Card>
-    <View style={{flexDirection: 'row'}}>
-      <Checkbox status={checked ? 'checked' : 'unchecked'} onPress={() => setChecked(!checked)} />
-      {isTrainingMax
-      ? (<View style={{flexDirection: 'row'}}><Text>{weight}</Text><Adjustable number={percent * 100} increment={5} formatFn={(count) => `${count}%`} onChange={(number, type) => setPercent(number / 100)} /></View>)
-      : <View style={{flexDirection: 'row'}}><Adjustable number={weight} increment={5} onChange={(number, type) => setWeight(number)} /></View>}
-    </View>
-    <Text>x{params.reps}{!params.amrap || '+'}</Text>
-    <PlateCalculator weight={weight} />
-  </Card>
+    <Card>
+      <View style={{ flexDirection: 'row' }}>
+        <Checkbox status={checked ? 'checked' : 'unchecked'} onPress={() => setChecked(!checked)} />
+        {isTrainingMax
+          ? (<View style={{ flexDirection: 'row' }}><Text>{weight}</Text><Adjustable number={percent * 100} increment={5} formatFn={(count) => `${count}%`} onChange={(number, type) => setPercent(number / 100)} /></View>)
+          : <View style={{ flexDirection: 'row' }}><Adjustable number={weight} increment={5} onChange={(number, type) => setWeight(number)} /></View>}
+      </View>
+      <Text>x{params.reps}{!params.amrap || '+'}</Text>
+      <PlateCalculator weight={weight} />
+    </Card>
   )
 }

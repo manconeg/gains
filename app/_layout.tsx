@@ -1,10 +1,10 @@
-import { Slot, Stack } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, useColorScheme } from 'react-native'
-import { useTheme, Appbar, MD3DarkTheme, MD3LightTheme, Provider as PaperProvider } from 'react-native-paper'
-import { useMaterial3Theme } from '@pchmn/expo-material3-theme'
-import { useMemo } from 'react'
 import { WorkoutContext, workouts } from '@/contexts/WorkoutContext'
+import { useMaterial3Theme } from '@pchmn/expo-material3-theme'
+import { Stack } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
+import { useMemo } from 'react'
+import { StyleSheet, useColorScheme } from 'react-native'
+import { Appbar, MD3DarkTheme, MD3LightTheme, Provider as PaperProvider, useTheme } from 'react-native-paper'
 
 export default function HomeLayout() {
   const colorScheme = useColorScheme()
@@ -28,12 +28,12 @@ export default function HomeLayout() {
           //   // fontWeight: 'bold',
           // },
           header: (params) => <Appbar.Header>
-              {params.back ? <Appbar.BackAction onPress={() => params.navigation.goBack()} /> : ''}
-              <Appbar.Content title={params.options.title} />
-              {/* <Appbar.Action icon="calendar" onPress={() => {}} />
-              <Appbar.Action icon="magnify" onPress={() => {}} /> */}
-            </Appbar.Header>,
-          contentStyle: styles.container
+            {params.back ? <Appbar.BackAction onPress={() => params.navigation.goBack()} /> : ''}
+            <Appbar.Content title={params.options.title} />
+            {/* <Appbar.Action icon="calendar" onPress={() => {}} />
+                <Appbar.Action icon="magnify" onPress={() => {}} /> */}
+          </Appbar.Header>,
+          contentStyle: styles.container,
         }} />
       </WorkoutContext.Provider>
       <StatusBar style="auto" />
@@ -45,10 +45,11 @@ function makeStyles() {
 
   return StyleSheet.create({
     header: {
-      borderBottomWidth: 0,
+      // borderBottomWidth: 0,
     },
     container: {
       paddingHorizontal: 16,
+      overflow: 'scroll',
       // flex: 1,
       // alignItems: 'center',
       // justifyContent: 'center',

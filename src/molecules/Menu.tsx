@@ -1,5 +1,5 @@
-import { Text, View, Button } from 'react-native'
 import { Link } from "expo-router"
+import { View } from 'react-native'
 
 export type MenuItem = {
   text: string,

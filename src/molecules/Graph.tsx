@@ -1,15 +1,14 @@
 import * as d3 from "d3"
-import { Selection, root } from "d3-selection/src/selection/index"
-import { useState, useRef, useEffect, createRef, useLayoutEffect } from "react"
-import { View, useWindowDimensions } from "react-native"
-import { Svg, G, Path, Circle } from "react-native-svg"
+import { useLayoutEffect, useRef, useState } from "react"
+import { View } from "react-native"
+import { Circle, G, Path, Svg } from "react-native-svg"
 
 export type GraphParams = {
-    data: number[],
-    marginTop: number,
-    marginRight: number,
-    marginBottom: number,
-    marginLeft: number,
+  data: number[],
+  marginTop: number,
+  marginRight: number,
+  marginBottom: number,
+  marginLeft: number,
 }
 
 export function Graph({
@@ -19,16 +18,16 @@ export function Graph({
   marginBottom = 30,
   marginLeft = 40
 }: GraphParams) {
-    const [width, setWidth] = useState(0);
-    const [height, setHeight] = useState(0);
-    const gs = useRef<View>(null)
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
+  const gs = useRef<View>(null)
 
-    useLayoutEffect(() => {
-      gs.current?.measureInWindow((x, y, width, height) => {
-        setWidth(width)
-        setHeight(height)
-      })
-    });
+  useLayoutEffect(() => {
+    gs.current?.measureInWindow((x, y, width, height) => {
+      setWidth(width)
+      setHeight(height)
+    })
+  });
 
   const gx = useRef<G>()
   const gy = useRef<G>()
@@ -38,7 +37,7 @@ export function Graph({
   // useEffect(() => d3.axisBottom(x)(new Selection([[gx.current]], root)), [gx, x])
   // useEffect(() => d3.axisLeft(y)(new Selection([[gy.current]], root)), [gy, y])
   return (
-    <View ref={gs} style={{flex:1}}>
+    <View ref={gs} style={{ flex: 1 }}>
       <Svg>
         <G ref={gx} transform={`translate(0,${height - marginBottom})`} />
         <G ref={gy} transform={`translate(${marginLeft},0)`} />

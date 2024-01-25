@@ -1,10 +1,10 @@
-import { StyleSheet, View } from 'react-native';
 import { LiftCard } from '@/atoms';
-import { MenuItem, Menu }  from '@/molecules'
-import { Slot, Stack } from 'expo-router'
-import { Divider, Text } from 'react-native-paper';
 import { WorkoutContext } from '@/contexts/WorkoutContext';
+import { Menu, MenuItem } from '@/molecules';
+import { Stack } from 'expo-router';
 import { useContext } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Divider, Text } from 'react-native-paper';
 
 export default function App() {
   const menuItems: MenuItem[] = [
@@ -16,11 +16,11 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{title: 'In Thickness (and in health)',}}/>
+      <Stack.Screen options={{ title: 'In Thickness (and in health)', }} />
       <Text>Today</Text>
       <Divider />
       <View style={styles.movement}>
-          {workouts.map((workout, key) => <LiftCard key={key} id={key} workout={workout}/>)}
+        {workouts.map((workout, key) => <LiftCard key={key} id={key} workout={workout} />)}
       </View>
       <Menu items={menuItems} />
       <Text>This week</Text>
@@ -36,6 +36,6 @@ const styles = StyleSheet.create({
   },
   movement: {
     // backgroundColor: 'black',
-    alignItems: 'center',
+    // alignItems: 'center',
   },
 })

@@ -5,13 +5,13 @@ export default function App() {
   const menuItems: MenuItem[] = [
     { text: 'Too little', link: '' },
     { text: 'About enough', link: '' },
-    { text: 'Plenty', link: '' }, 
+    { text: 'Plenty', link: '' },
     { text: 'Oink', link: '' },
   ]
 
   return (
     <View>
-        <Menu items={menuItems} />
+      <Menu items={menuItems} />
     </View>
   );
 }
