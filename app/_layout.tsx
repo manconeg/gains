@@ -1,11 +1,9 @@
 import { Slot, Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import { useContext } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { Appbar, MD3DarkTheme, MD3LightTheme, Provider as PaperProvider } from 'react-native-paper'
+import { StyleSheet, useColorScheme } from 'react-native'
+import { useTheme, Appbar, MD3DarkTheme, MD3LightTheme, Provider as PaperProvider } from 'react-native-paper'
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme'
 import { useMemo } from 'react'
-import { useColorScheme } from 'react-native'
 import { WorkoutContext, workouts } from '@/contexts/WorkoutContext'
 
 export default function HomeLayout() {
@@ -17,6 +15,8 @@ export default function HomeLayout() {
       colorScheme === 'dark' ? { ...MD3DarkTheme, colors: theme.dark } : { ...MD3LightTheme, colors: theme.light },
     [colorScheme, theme]
   )
+
+  const styles = makeStyles()
 
   return (
     <PaperProvider theme={paperTheme}>
@@ -33,20 +33,26 @@ export default function HomeLayout() {
               {/* <Appbar.Action icon="calendar" onPress={() => {}} />
               <Appbar.Action icon="magnify" onPress={() => {}} /> */}
             </Appbar.Header>,
-          contentStyle: {...styles.container, backgroundColor: paperTheme.colors.background}
+          contentStyle: styles.container
         }} />
       </WorkoutContext.Provider>
       <StatusBar style="auto" />
     </PaperProvider>)
 }
 
-const styles = StyleSheet.create({
-  header: {
-    borderBottomWidth: 0,
-  },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-})
+function makeStyles() {
+  const theme = useTheme();
+
+  return StyleSheet.create({
+    header: {
+      borderBottomWidth: 0,
+    },
+    container: {
+      paddingHorizontal: 16,
+      // flex: 1,
+      // alignItems: 'center',
+      // justifyContent: 'center',
+      backgroundColor: theme.colors.background,
+    },
+  })
+}

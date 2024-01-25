@@ -1,7 +1,7 @@
 import { View, Button } from 'react-native'
 import { Adjustable } from '@/atoms';
 import { PlateCalculator } from '@/molecules/PlateCalculator';
-import { Text, Checkbox } from 'react-native-paper';
+import { Text, Checkbox, Card } from 'react-native-paper';
 import { useEffect, useState } from 'react'
 
 type TrainingMaxWeight = {
@@ -52,8 +52,8 @@ export function Set(params: SetParams) {
     }
   }, [percent])
 
-  return ( 
-  <View>
+  return (
+  <Card>
     <View style={{flexDirection: 'row'}}>
       <Checkbox status={checked ? 'checked' : 'unchecked'} onPress={() => setChecked(!checked)} />
       {isTrainingMax
@@ -62,5 +62,6 @@ export function Set(params: SetParams) {
     </View>
     <Text>x{params.reps}{!params.amrap || '+'}</Text>
     <PlateCalculator weight={weight} />
-  </View>)
+  </Card>
+  )
 }

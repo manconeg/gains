@@ -1,2 +1,3 @@
 export { Adjustable } from './Adjustable'
-export { LiftCard } from '../molecules/LiftCard'
+export { TopSet } from './TopSet'
+export { WorkoutCard as LiftCard } from '../molecules/WorkoutCard'

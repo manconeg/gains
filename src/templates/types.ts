@@ -133,7 +133,7 @@ const fiveThreeOne: ProgramTemplate = {
                     workouts: [{
                         name: "",
                         movements: [{
-                            type: "$secondary",
+                            type: "$primary",
                             sets: [
                                 {
                                     sets: 5,
