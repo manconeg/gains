@@ -1,6 +1,6 @@
 import { TopSet } from '@/atoms'
 import { Workout } from '@/data/types'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { Card, Icon, Text, useTheme } from 'react-native-paper'
 
@@ -13,8 +13,8 @@ export function WorkoutCard({ id, workout }: LiftCardParams) {
     const styles = makeStyles();
 
     return (
-        <Link href={`workout/${id}`} style={{ width: '100%', marginTop: 5 }}>
-            <Card mode={workout.complete ? 'contained' : 'elevated'} style={{ width: '100%' }}>
+        // <Link href={`workout/${id}`} style={styles.link}>
+            <Card mode={workout.complete ? 'contained' : 'elevated'} style={styles.card} onPress={() => router.navigate(`workout/${id}`)}>
                 <Card.Content style={styles.container}>
                     <Icon source="camera" size={50} />
                     <View>
@@ -28,7 +28,7 @@ export function WorkoutCard({ id, workout }: LiftCardParams) {
                     </View>
                 </Card.Content>
             </Card>
-        </Link>
+        // </Link>
     )
 }
 
@@ -38,6 +38,29 @@ function makeStyles() {
     return StyleSheet.create({
         container: {
             flexDirection: 'row',
+        },
+        link: {
+            // width: '100%',
+            marginTop: 5,
+            backgroundColor: 'red',
+            // flexDirection: 'column',
+            // flexBasis: 'auto',
+            // flexShrink: 0,
+            // display: 'flex',
+            // alignItems: 'stretch',
+            // position: 'relative',
+            // zIndex: 0,
+            // justifyContent: 'flex-end',
+        },
+        card: {
+            // position: 'relative',
+            // width: '100%',
+            // flex: 1,
+            // flexGrow: 1,
+            // flexShrink: 0,
+            // flexBasis: '100%',
+            marginTop: 5,
+            // backgroundColor: 'blue',
         },
     })
 }

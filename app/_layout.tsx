@@ -27,12 +27,12 @@ export default function HomeLayout() {
           // headerTitleStyle: {
           //   // fontWeight: 'bold',
           // },
-          header: (params) => <Appbar.Header>
+          header: (params) => (<Appbar.Header>
             {params.back ? <Appbar.BackAction onPress={() => params.navigation.goBack()} /> : ''}
             <Appbar.Content title={params.options.title} />
             {/* <Appbar.Action icon="calendar" onPress={() => {}} />
                 <Appbar.Action icon="magnify" onPress={() => {}} /> */}
-          </Appbar.Header>,
+          </Appbar.Header>),
           contentStyle: styles.container,
         }} />
       </WorkoutContext.Provider>

@@ -1,6 +1,6 @@
 import { TopSet } from '@/atoms'
 import { Movement } from '@/data/types'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { Card, Icon, Text, useTheme } from 'react-native-paper'
 
@@ -14,8 +14,8 @@ export function MovementCard({ workoutId, movementId, movement }: MovementCardPa
     const styles = makeStyles();
 
     return (
-        <Link href={`workout/${workoutId}/movement/${movementId}`} style={{ width: '100%', marginTop: 2 }}>
-            <Card mode={movement.complete ? 'contained' : 'elevated'} style={{ width: '100%' }}>
+        // <Link href={`workout/${workoutId}/movement/${movementId}`} style={{ width: '100%', marginTop: 2 }}>
+            <Card mode={movement.complete ? 'contained' : 'elevated'} style={{ width: '100%', marginTop: 2 }} onPress={() => router.navigate(`workout/${workoutId}/movement/${movementId}`)}>
                 <Card.Content style={styles.container}>
                     <Icon source="camera" size={50} />
                     <TopSet movement={movement} />
@@ -26,7 +26,7 @@ export function MovementCard({ workoutId, movementId, movement }: MovementCardPa
                     </View>
                 </Card.Content>
             </Card>
-        </Link>
+        // </Link>
     )
 }
 
