@@ -1,13 +1,14 @@
 import { Adjustable } from '@/atoms';
 import { WorkoutContext } from '@/contexts/WorkoutContext';
-import { Graph, Set } from '@/molecules';
+import { Graph } from '@/molecules';
+import { Set } from '@/organisms';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useContext, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 
 export default function Movement() {
-  const workouts = useContext(WorkoutContext);
+  const workouts = useContext(WorkoutContext)
   const { movementId, workoutId } = useLocalSearchParams<{ movementId: string, workoutId: string }>();
   // const params = useLocalSearchParams<WorkoutParams>()
 
@@ -17,7 +18,7 @@ export default function Movement() {
   const [trainingMax, setTrainingMax] = useState(movement.max)
 
   return (
-    <View>
+    <ScrollView style={styles.container} contentContainerStyle={{padding: 3}}>
       <Stack.Screen options={{ title: movement.name, }} />
       <View style={{ flexDirection: 'row' }}>
         <Text>Training Max</Text>
@@ -30,7 +31,25 @@ export default function Movement() {
       <View>
         <Text>Progress</Text>
         <Card>
-          <Graph data={[5, 2, 8, 2, 6, 8, 9, 10]} />
+          <Graph data={[{
+            date: new Date('1995-12-17T03:24:00'),
+            value: 50,
+          },{
+            date: new Date('1996-1-17T03:24:00'),
+            value: 60,
+          },{
+            date: new Date('1996-2-17T03:24:00'),
+            value: 70,
+          },{
+            date: new Date('1996-2-17T03:24:00'),
+            value: 80,
+          },{
+            date: new Date('1996-3-17T03:24:00'),
+            value: 90,
+          },{
+            date: new Date('1996-4-17T03:24:00'),
+            value: 100,
+          },]} />
         </Card>
       </View>
       <View>
@@ -57,15 +76,12 @@ export default function Movement() {
           <Text>5 of 5</Text>
         </Card>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    
   },
 })

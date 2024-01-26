@@ -1,5 +1,5 @@
 import { Adjustable } from '@/atoms';
-import { PlateCalculator } from '@/molecules/PlateCalculator';
+import { PlateCalculator, LiftCard } from '@/molecules';
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Card, Checkbox, Text } from 'react-native-paper';
@@ -48,15 +48,20 @@ export function Set(params: SetParams) {
   }, [percent])
 
   return (
-    <Card>
-      <View style={{ flexDirection: 'row' }}>
+    <LiftCard>
+      <LiftCard.Left>
         <Checkbox status={checked ? 'checked' : 'unchecked'} onPress={() => setChecked(!checked)} />
-        {isTrainingMax
-          ? (<View style={{ flexDirection: 'row' }}><Text>{weight}</Text><Adjustable number={percent * 100} increment={5} formatFn={(count) => `${count}%`} onChange={(number, type) => setPercent(number / 100)} /></View>)
-          : <View style={{ flexDirection: 'row' }}><Adjustable number={weight} increment={5} onChange={(number, type) => setWeight(number)} /></View>}
-      </View>
-      <Text>x{params.reps}{!params.amrap || '+'}</Text>
-      <PlateCalculator weight={weight} />
-    </Card>
+      </LiftCard.Left>
+      <LiftCard.Content>
+        <View style={{ flexDirection: 'row' }}>
+          
+          {isTrainingMax
+            ? (<View style={{ flexDirection: 'row' }}><Text>{weight}</Text><Adjustable number={percent * 100} increment={5} formatFn={(count) => `${count}%`} onChange={(number, type) => setPercent(number / 100)} /></View>)
+            : <View style={{ flexDirection: 'row' }}><Adjustable number={weight} increment={5} onChange={(number, type) => setWeight(number)} /></View>}
+        </View>
+        <Text>x{params.reps}{!params.amrap || '+'}</Text>
+        <PlateCalculator weight={weight} />
+      </LiftCard.Content>
+    </LiftCard>
   )
 }

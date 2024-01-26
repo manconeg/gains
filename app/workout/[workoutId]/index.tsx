@@ -1,8 +1,8 @@
 import { WorkoutContext } from '@/contexts/WorkoutContext';
-import { MovementCard } from '@/molecules/MovementCard';
+import { MovementCard } from '@/organisms';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useContext } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 
 export default function Workout() {
   const workouts = useContext(WorkoutContext);
@@ -12,10 +12,10 @@ export default function Workout() {
   const workout = workouts[Number(workoutId)]
 
   return (
-    <View>
+    <ScrollView style={styles.container} contentContainerStyle={{padding: 3}}>
       <Stack.Screen options={{ title: `${workout.variation} ${workout.day} - ${workout.date.toUTCString()}`, }} />
       {workout.movements.map((movement, key) => <MovementCard key={key} workoutId={workoutId} movementId={key} movement={movement} />)}
-    </View>
+    </ScrollView>
   );
 }
 

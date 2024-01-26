@@ -3,12 +3,23 @@ import { View, Text, Dimensions } from "react-native"
 import { LineChart } from "react-native-chart-kit";
 
 export type GraphParams = {
-  data: number[],
+  data:
+    {
+      date: Date,
+      value: number,
+    }[]
 }
 
 export function Graph({
   data,
 }: GraphParams) {
+  let dataSummary: number[] = []
+  let labels = new Set<string>()
+  data.sort((dataPointA, dataPointB) => dataPointA.date.getTime() - dataPointB.date.getTime()).forEach((dataPoint) => {
+    labels.add(dataPoint.date.toLocaleString('default', { month: 'long' }))
+    dataSummary.push(dataPoint.value)
+  })
+
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const gs = useRef<View>(null)
@@ -18,23 +29,14 @@ export function Graph({
     setHeight(event.nativeEvent.layout.height)
   }
 
-  const lineData = {
-    labels: ["January", "February", "March", "April", "May", "June"],
-    datasets: [
-      {
-        data: data,
-      }
-    ],
-  };
-
   return (
     <View onLayout={update} style={{flex:1}}>
     <LineChart
     data={{
-      labels: [...data],
+      labels: Array.from(labels.values()),
       datasets: [
         {
-          data: data
+          data: dataSummary
         }
       ]
     }}

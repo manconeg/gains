@@ -3,7 +3,7 @@ import { useMaterial3Theme } from '@pchmn/expo-material3-theme'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useMemo } from 'react'
-import { StyleSheet, useColorScheme } from 'react-native'
+import { ScrollView, StyleSheet, useColorScheme } from 'react-native'
 import { Appbar, MD3DarkTheme, MD3LightTheme, Provider as PaperProvider, useTheme } from 'react-native-paper'
 
 export default function HomeLayout() {
@@ -21,7 +21,8 @@ export default function HomeLayout() {
   return (
     <PaperProvider theme={paperTheme}>
       <WorkoutContext.Provider value={workouts}>
-        <Stack screenOptions={{
+        <Stack
+           screenOptions={{
           // headerStyle: {...styles.header, backgroundColor: paperTheme.colors.primaryContainer},
           // headerTintColor: paperTheme.colors.primary,
           // headerTitleStyle: {
@@ -48,8 +49,7 @@ function makeStyles() {
       // borderBottomWidth: 0,
     },
     container: {
-      paddingHorizontal: 16,
-      overflow: 'scroll',
+      paddingHorizontal: 1,
       // flex: 1,
       // alignItems: 'center',
       // justifyContent: 'center',

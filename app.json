@@ -31,7 +31,15 @@
     "plugins": [
       "expo-router"
     ],
-    "sdkVersion": "50.0.0"
+    "sdkVersion": "50.0.0",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "dc844278-e152-4899-b87a-fe63a2016666"
+      }
+    }
   },
   "name": "gains"
 }
