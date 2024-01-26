@@ -1,51 +1,70 @@
-import * as d3 from "d3"
-import { useLayoutEffect, useRef, useState } from "react"
-import { View } from "react-native"
-import { Circle, G, Path, Svg } from "react-native-svg"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
+import { View, Text, Dimensions } from "react-native"
+import { LineChart } from "react-native-chart-kit";
 
 export type GraphParams = {
   data: number[],
-  marginTop: number,
-  marginRight: number,
-  marginBottom: number,
-  marginLeft: number,
 }
 
 export function Graph({
   data,
-  marginTop = 20,
-  marginRight = 20,
-  marginBottom = 30,
-  marginLeft = 40
 }: GraphParams) {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
   const gs = useRef<View>(null)
 
-  useLayoutEffect(() => {
-    gs.current?.measureInWindow((x, y, width, height) => {
-      setWidth(width)
-      setHeight(height)
-    })
-  });
+  const update = (event) => {
+    setWidth(event.nativeEvent.layout.width)
+    setHeight(event.nativeEvent.layout.height)
+  }
 
-  const gx = useRef<G>()
-  const gy = useRef<G>()
-  const x = d3.scaleLinear([0, data.length - 1], [marginLeft, width - marginRight])
-  const y = d3.scaleLinear(d3.extent(data), [height - marginBottom, marginTop])
-  const line = d3.line((d, i) => x(i), y)
-  // useEffect(() => d3.axisBottom(x)(new Selection([[gx.current]], root)), [gx, x])
-  // useEffect(() => d3.axisLeft(y)(new Selection([[gy.current]], root)), [gy, y])
+  const lineData = {
+    labels: ["January", "February", "March", "April", "May", "June"],
+    datasets: [
+      {
+        data: data,
+      }
+    ],
+  };
+
   return (
-    <View ref={gs} style={{ flex: 1 }}>
-      <Svg>
-        <G ref={gx} transform={`translate(0,${height - marginBottom})`} />
-        <G ref={gy} transform={`translate(${marginLeft},0)`} />
-        <Path fill="none" stroke="currentColor" strokeWidth="1.5" d={line(data)} />
-        <G fill="white" stroke="currentColor" strokeWidth="1.5">
-          {data.map((d, i) => (<Circle key={i} cx={x(i)} cy={y(d)} r="2.5" />))}
-        </G>
-      </Svg>
-    </View>
+    <View onLayout={update} style={{flex:1}}>
+    <LineChart
+    data={{
+      labels: [...data],
+      datasets: [
+        {
+          data: data
+        }
+      ]
+    }}
+    width={width}
+    height={220}
+    transparent={true}
+    // yAxisLabel="$"
+    // yAxisSuffix="k"
+    // yAxisInterval={1} // optional, defaults to 1
+    chartConfig={{
+      // backgroundGradientFrom: "#fb8c00",
+      // backgroundGradientTo: "#ffa726",
+      decimalPlaces: 0, // optional, defaults to 2dp
+      color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+      // labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+      // style: {
+      //   borderRadius: 16
+      // },
+      // propsForDots: {
+      //   r: "6",
+      //   strokeWidth: "2",
+      //   stroke: "#ffa726"
+      // }
+    }}
+    bezier
+    style={{
+    //   marginVertical: 8,
+    //   borderRadius: 16
+    }}
+  />
+  </View>
   )
 }
