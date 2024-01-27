@@ -3,7 +3,7 @@ import { useMaterial3Theme } from '@pchmn/expo-material3-theme'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useMemo } from 'react'
-import { ScrollView, StyleSheet, useColorScheme } from 'react-native'
+import { StyleSheet, useColorScheme } from 'react-native'
 import { Appbar, MD3DarkTheme, MD3LightTheme, Provider as PaperProvider, useTheme } from 'react-native-paper'
 
 export default function HomeLayout() {

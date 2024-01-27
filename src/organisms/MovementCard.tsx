@@ -18,12 +18,12 @@ export function MovementCard({ workoutId, movementId, movement }: MovementCardPa
             <LiftCard.Left>
                 <Icon source="camera" size={50} />
             </LiftCard.Left>
-             <LiftCard.Content>
+            <LiftCard.Content>
                 <TopSet movement={movement} />
-             </LiftCard.Content>
-             <LiftCard.Action>
+            </LiftCard.Content>
+            <LiftCard.Action>
                 <Text>{movement.complete ? 'Complete ' : ''}&gt;</Text>
-             </LiftCard.Action>
+            </LiftCard.Action>
         </LiftCard>
     )
 }

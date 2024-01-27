@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { LayoutChangeEvent, View } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 

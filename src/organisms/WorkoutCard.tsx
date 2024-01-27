@@ -17,13 +17,13 @@ export function WorkoutCard({ id, workout }: LiftCardParams) {
             <LiftCard.Left>
                 <Icon source="camera" size={50} />
             </LiftCard.Left>
-             <LiftCard.Content>
-                 <Text>{workout.date.toLocaleDateString('en-us', { weekday: "long", year: "numeric", month: "short", day: "numeric" })}</Text>
-                 {workout.movements.map((movement, key) => <TopSet key={key} movement={movement} />)}
-             </LiftCard.Content>
-             <LiftCard.Action>
-                 <Text>{workout.complete ? 'Complete ' : ''}&gt;</Text>
-             </LiftCard.Action>
+            <LiftCard.Content>
+                <Text>{workout.date.toLocaleDateString('en-us', { weekday: "long", year: "numeric", month: "short", day: "numeric" })}</Text>
+                {workout.movements.map((movement, key) => <TopSet key={key} movement={movement} />)}
+            </LiftCard.Content>
+            <LiftCard.Action>
+                <Text>{workout.complete ? 'Complete ' : ''}&gt;</Text>
+            </LiftCard.Action>
         </LiftCard>
     )
 }

@@ -2,7 +2,7 @@ import { WorkoutContext } from '@/contexts/WorkoutContext';
 import { MovementCard } from '@/organisms';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useContext } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 
 export default function Workout() {
   const workouts = useContext(WorkoutContext);

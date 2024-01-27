@@ -54,7 +54,7 @@ export function Set(params: SetParams) {
       </LiftCard.Left>
       <LiftCard.Content>
         <View style={{ flexDirection: 'row' }}>
-          
+
           {isTrainingMax
             ? (<View style={{ flexDirection: 'row' }}><Text>{weight}</Text><Adjustable number={percent * 100} increment={5} formatFn={(count) => `${count}%`} onChange={(number, type) => setPercent(number / 100)} /></View>)
             : <View style={{ flexDirection: 'row' }}><Adjustable number={weight} increment={5} onChange={(number, type) => setWeight(number)} /></View>}

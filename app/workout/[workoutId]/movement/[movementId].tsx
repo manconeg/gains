@@ -4,7 +4,7 @@ import { Graph } from '@/molecules';
 import { Set } from '@/organisms';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useContext, useState } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 
 export default function Movement() {
