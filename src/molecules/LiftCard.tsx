@@ -20,19 +20,19 @@ export function LiftCard({ href = '!', mode = 'elevated', children }: LiftCardPa
     )
 }
 
-LiftCard.Left = ({children}) => {
+LiftCard.Left = ({ children }) => {
     return (<View style={{ justifyContent: 'center' }}>
         {children}
     </View>)
 }
 
-LiftCard.Content = ({children}) => {
-    return (<View style={{ paddingLeft: 10}}>
+LiftCard.Content = ({ children }) => {
+    return (<View style={{ paddingLeft: 10 }}>
         {children}
     </View>)
 }
 
-LiftCard.Action = ({children}) => {
+LiftCard.Action = ({ children }) => {
     return (
         <View style={{ flex: 1, justifyContent: 'center' }}>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>

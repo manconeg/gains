@@ -22,20 +22,20 @@ export default function HomeLayout() {
     <PaperProvider theme={paperTheme}>
       <WorkoutContext.Provider value={workouts}>
         <Stack
-           screenOptions={{
-          // headerStyle: {...styles.header, backgroundColor: paperTheme.colors.primaryContainer},
-          // headerTintColor: paperTheme.colors.primary,
-          // headerTitleStyle: {
-          //   // fontWeight: 'bold',
-          // },
-          header: (params) => (<Appbar.Header>
-            {params.back ? <Appbar.BackAction onPress={() => params.navigation.goBack()} /> : ''}
-            <Appbar.Content title={params.options.title} />
-            {/* <Appbar.Action icon="calendar" onPress={() => {}} />
+          screenOptions={{
+            // headerStyle: {...styles.header, backgroundColor: paperTheme.colors.primaryContainer},
+            // headerTintColor: paperTheme.colors.primary,
+            // headerTitleStyle: {
+            //   // fontWeight: 'bold',
+            // },
+            header: (params) => (<Appbar.Header>
+              {params.back ? <Appbar.BackAction onPress={() => params.navigation.goBack()} /> : ''}
+              <Appbar.Content title={params.options.title} />
+              {/* <Appbar.Action icon="calendar" onPress={() => {}} />
                 <Appbar.Action icon="magnify" onPress={() => {}} /> */}
-          </Appbar.Header>),
-          contentStyle: styles.container,
-        }} />
+            </Appbar.Header>),
+            contentStyle: styles.container,
+          }} />
       </WorkoutContext.Provider>
       <StatusBar style="auto" />
     </PaperProvider>)

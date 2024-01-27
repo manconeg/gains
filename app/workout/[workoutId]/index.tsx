@@ -12,7 +12,7 @@ export default function Workout() {
   const workout = workouts[Number(workoutId)]
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{padding: 3}}>
+    <ScrollView style={styles.container} contentContainerStyle={{ padding: 3 }}>
       <Stack.Screen options={{ title: `${workout.variation} ${workout.day} - ${workout.date.toUTCString()}`, }} />
       {workout.movements.map((movement, key) => <MovementCard key={key} workoutId={workoutId} movementId={key} movement={movement} />)}
     </ScrollView>

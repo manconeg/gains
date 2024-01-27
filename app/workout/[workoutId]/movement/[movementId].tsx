@@ -18,7 +18,7 @@ export default function Movement() {
   const [trainingMax, setTrainingMax] = useState(movement.max)
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{padding: 3}}>
+    <ScrollView style={styles.container} contentContainerStyle={{ padding: 3 }}>
       <Stack.Screen options={{ title: movement.name, }} />
       <View style={{ flexDirection: 'row' }}>
         <Text>Training Max</Text>
@@ -34,19 +34,19 @@ export default function Movement() {
           <Graph data={[{
             date: new Date('1995-12-17T03:24:00'),
             value: 50,
-          },{
+          }, {
             date: new Date('1996-1-17T03:24:00'),
             value: 60,
-          },{
+          }, {
             date: new Date('1996-2-17T03:24:00'),
             value: 70,
-          },{
+          }, {
             date: new Date('1996-2-17T03:24:00'),
             value: 80,
-          },{
+          }, {
             date: new Date('1996-3-17T03:24:00'),
             value: 90,
-          },{
+          }, {
             date: new Date('1996-4-17T03:24:00'),
             value: 100,
           },]} />
@@ -82,6 +82,6 @@ export default function Movement() {
 
 const styles = StyleSheet.create({
   container: {
-    
+
   },
 })
