@@ -1,7 +1,7 @@
-import { Instant } from "@js-joda/core"
+import { LocalDate } from "@js-joda/core"
 
 export type Workout = {
-    date: Instant,
+    date: LocalDate,
     program: string,
     variation: string,
     day: string,

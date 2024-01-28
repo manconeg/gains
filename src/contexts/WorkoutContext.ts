@@ -1,10 +1,10 @@
 import { Workout } from '@/data/types';
+import { ChronoUnit, Instant, ZoneId, LocalDate } from '@js-joda/core';
 import { createContext } from 'react';
-import { Instant, ChronoUnit } from '@js-joda/core';
 
 export const workouts: Workout[] = [
     {
-        date: Instant.now(),
+        date: LocalDate.now(),//Instant.now().atZone(ZoneId.SYSTEM),
         program: '531',
         variation: 'Classic',
         day: '1s',
@@ -40,7 +40,7 @@ export const workouts: Workout[] = [
             },
         ],
     }, {
-        date: Instant.now().minus(2, ChronoUnit.DAYS),
+        date: LocalDate.now().minus(2, ChronoUnit.DAYS),
         program: '531',
         complete: true,
         variation: 'Classic',
@@ -76,7 +76,7 @@ export const workouts: Workout[] = [
             },
         ],
     }, {
-        date: Instant.now().plus(2, ChronoUnit.DAYS),
+        date: LocalDate.now().plus(2, ChronoUnit.DAYS),
         program: '5x5',
         complete: true,
         variation: 'Classic',

@@ -5,7 +5,7 @@ import { Card, useTheme } from 'react-native-paper'
 type LiftCardParams = {
     href?: string,
     children: React.ReactNode,
-    mode: 'elevated' | 'outlined' | 'contained',
+    mode?: 'elevated' | 'outlined' | 'contained',
 }
 
 export function LiftCard({ href = '!', mode = 'elevated', children }: LiftCardParams) {
@@ -27,7 +27,7 @@ LiftCard.Left = ({ children }) => {
 }
 
 LiftCard.Content = ({ children }) => {
-    return (<View style={{ paddingLeft: 10 }}>
+    return (<View style={{ paddingLeft: 10, flex: 1 }}>
         {children}
     </View>)
 }

@@ -1,7 +1,7 @@
 import { WorkoutContext } from '@/contexts';
 import { Graph } from '@/molecules';
 import { MiniCalendar, WorkoutCard } from '@/organisms';
-import { Stack } from 'expo-router';
+import { Stack, router } from 'expo-router';
 import { useContext } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { AnimatedFAB, Text, useTheme } from 'react-native-paper';
@@ -41,7 +41,7 @@ export default function App() {
           {workouts.map((workout, key) => <WorkoutCard key={key} id={key} workout={workout} />)}
         </View>
         <Text style={styles.header}>Week</Text>
-        <MiniCalendar workouts={workouts}/>
+        <MiniCalendar workouts={workouts} />
         <Text style={styles.header}>Stats</Text>
         <Graph data={liftData} />
       </ScrollView>
@@ -49,7 +49,7 @@ export default function App() {
         icon={'plus'}
         label={'New Workout'}
         extended={true}
-        onPress={() => console.log('Pressed')}
+        onPress={() => router.navigate(`workout/new`)}
         visible={true}
         animateFrom={'right'}
         // iconMode={'static'}

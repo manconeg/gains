@@ -1,26 +1,24 @@
-import { StyleSheet, View } from 'react-native';
-import { Card, Divider, useTheme, Text } from 'react-native-paper';
 import { Workout } from '@/data/types';
-import { Instant, TemporalAdjusters, DayOfWeek, ChronoField, ZoneId, TemporalField, ChronoUnit, TemporalUnit, ZoneOffset } from '@js-joda/core'
+import { ChronoField, ChronoUnit, DayOfWeek, TemporalAdjusters, LocalDate } from '@js-joda/core';
+import { StyleSheet, View } from 'react-native';
+import { Card, Divider, Text, useTheme } from 'react-native-paper';
 
 type MiniCalendarParams = {
     workouts: Workout[],
-    id: number,
 }
 
-export function MiniCalendar({workouts}: MiniCalendarParams) {
-    
+export function MiniCalendar({ workouts }: MiniCalendarParams) {
     const styles = makeStyles();
-    const todayLocal = Instant.now().atZone(ZoneId.SYSTEM).truncatedTo(ChronoUnit.DAYS)
+    const todayLocal = LocalDate.now()
     const pastSunday = todayLocal.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY))
     const thisSaturday = todayLocal.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
 
     const activities: Workout[][] = [[], [], [], [], [], [], []]
-    
+
     workouts
-        .filter(workout => workout.date.isAfter(pastSunday.toInstant()))
-        .filter(workout => workout.date.isBefore(thisSaturday.toInstant()))
-        .forEach(workout => activities[workout.date.atZone(ZoneId.SYSTEM).get(ChronoField.DAY_OF_WEEK)].push(workout))
+        .filter(workout => workout.date.isAfter(pastSunday))
+        .filter(workout => workout.date.isBefore(thisSaturday))
+        .forEach(workout => activities[workout.date.get(ChronoField.DAY_OF_WEEK)].push(workout))
 
     return (
         <View>
