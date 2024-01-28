@@ -1,9 +1,11 @@
 import { Workout } from '@/data/types';
 import { createContext } from 'react';
+import { Instant, ChronoUnit } from '@js-joda/core';
 
 export const workouts: Workout[] = [
     {
-        date: new Date(2023, 2, 23),
+        date: Instant.now(),
+        program: '531',
         variation: 'Classic',
         day: '1s',
         complete: false,
@@ -38,7 +40,8 @@ export const workouts: Workout[] = [
             },
         ],
     }, {
-        date: new Date(2023, 2, 23),
+        date: Instant.now().minus(2, ChronoUnit.DAYS),
+        program: '531',
         complete: true,
         variation: 'Classic',
         day: '5s',
@@ -73,10 +76,11 @@ export const workouts: Workout[] = [
             },
         ],
     }, {
-        date: new Date(2023, 2, 24),
+        date: Instant.now().plus(2, ChronoUnit.DAYS),
+        program: '5x5',
         complete: true,
         variation: 'Classic',
-        day: 'Pyramic',
+        day: 'Workout A',
         movements: [
             {
                 name: "Deadlift",

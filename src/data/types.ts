@@ -1,5 +1,8 @@
+import { Instant } from "@js-joda/core"
+
 export type Workout = {
-    date: Date,
+    date: Instant,
+    program: string,
     variation: string,
     day: string,
     movements: Movement[],

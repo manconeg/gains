@@ -1,10 +1,26 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { Card, Divider, useTheme } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Card, Divider, useTheme, Text } from 'react-native-paper';
+import { Workout } from '@/data/types';
+import { Instant, TemporalAdjusters, DayOfWeek, ChronoField, ZoneId, TemporalField, ChronoUnit, TemporalUnit, ZoneOffset } from '@js-joda/core'
 
-export function MiniCalendar() {
+type MiniCalendarParams = {
+    workouts: Workout[],
+    id: number,
+}
+
+export function MiniCalendar({workouts}: MiniCalendarParams) {
+    
     const styles = makeStyles();
+    const todayLocal = Instant.now().atZone(ZoneId.SYSTEM).truncatedTo(ChronoUnit.DAYS)
+    const pastSunday = todayLocal.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY))
+    const thisSaturday = todayLocal.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
 
-    const activities = [null, null, "dl", null, "ohp", null, "bp"]
+    const activities: Workout[][] = [[], [], [], [], [], [], []]
+    
+    workouts
+        .filter(workout => workout.date.isAfter(pastSunday.toInstant()))
+        .filter(workout => workout.date.isBefore(thisSaturday.toInstant()))
+        .forEach(workout => activities[workout.date.atZone(ZoneId.SYSTEM).get(ChronoField.DAY_OF_WEEK)].push(workout))
 
     return (
         <View>
@@ -19,9 +35,9 @@ export function MiniCalendar() {
                 <View style={styles.day}><Text>S</Text></View>
             </View>
             <View style={styles.week}>
-                {activities.map((activity, key) => <View key={key} style={styles.day}>
-                    {activity ? <Card style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-                        <Card.Content><Text>{activity}</Text></Card.Content>
+                {activities.map((workoutsOfDay, key) => <View key={key} style={styles.day}>
+                    {workoutsOfDay.length ? <Card style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+                        <Card.Content><Text>{workoutsOfDay.length}</Text></Card.Content>
                     </Card> : null}
                 </View>)}
             </View>

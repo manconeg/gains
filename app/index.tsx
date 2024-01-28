@@ -41,7 +41,7 @@ export default function App() {
           {workouts.map((workout, key) => <WorkoutCard key={key} id={key} workout={workout} />)}
         </View>
         <Text style={styles.header}>Week</Text>
-        <MiniCalendar />
+        <MiniCalendar workouts={workouts}/>
         <Text style={styles.header}>Stats</Text>
         <Graph data={liftData} />
       </ScrollView>

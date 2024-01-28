@@ -11,14 +11,15 @@ type LiftCardParams = {
 
 export function WorkoutCard({ id, workout }: LiftCardParams) {
     const styles = makeStyles();
-
+    
     return (
         <LiftCard href={`workout/${id}`} mode={workout.complete ? 'contained' : 'elevated'}>
             <LiftCard.Left>
                 <Icon source="camera" size={50} />
             </LiftCard.Left>
             <LiftCard.Content>
-                <Text>{workout.date.toLocaleDateString('en-us', { weekday: "long", year: "numeric", month: "short", day: "numeric" })}</Text>
+                <Text>{workout.program} {workout.variation} {workout.day}</Text>
+                {/* <Text>{workout.date.toLocaleDateString('en-us', { weekday: "long", year: "numeric", month: "short", day: "numeric" })}</Text> */}
                 {workout.movements.map((movement, key) => <TopSet key={key} movement={movement} />)}
             </LiftCard.Content>
             <LiftCard.Action>
