@@ -1,93 +1,84 @@
-import { WorkoutContext } from '@/contexts/WorkoutContext';
-import { LiftCard } from '@/molecules';
-import { useContext } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-paper';
-import { RectProps } from 'react-native-svg';
+import { fiveThreeOne } from '@/contexts/ProgramContext';
+import { ProgramTemplate } from '@/models';
+import { useState } from 'react';
+import { LayoutChangeEvent, ScrollView, StyleSheet, View } from 'react-native';
+import { Card, Text, useTheme } from 'react-native-paper';
+import { Stack } from 'expo-router';
 
-export default function Workout() {
-    const workouts = useContext(WorkoutContext);
-
-    const commitsData = [
-        { date: "2017-01-02", count: 1 },
-        { date: "2017-01-03", count: 2 },
-        { date: "2017-01-04", count: 3 },
-        { date: "2017-01-05", count: 4 },
-        { date: "2017-01-06", count: 5 },
-        { date: "2017-01-30", count: 2 },
-        { date: "2017-01-31", count: 3 },
-        { date: "2017-03-01", count: 2 },
-        { date: "2017-04-02", count: 4 },
-        { date: "2017-03-05", count: 2 },
-        { date: "2017-02-30", count: 4 }
-    ];
-    let rectProps: RectProps = {}
+function ProgramTemplateCard({ programTemplate, width }: { programTemplate: ProgramTemplate, width: number }) {
     return (
-        <ScrollView style={styles.container} contentContainerStyle={{ padding: 3 }}>
-            {/* <Card>
-                <Card.Content>
-                    <View><Text>Squats</Text></View>
-                    <ContributionGraph
-                        // style={{backgroundColor: 'red'}}
-                        tooltipDataAttrs={(value) => rectProps}
-                        values={commitsData}
-                        endDate={new Date("2017-04-01")}
-                        numDays={105}
-                        width={200}
-                        height={220}
-                        // classForValue={() => 'red'}
-                        chartConfig={{
-                            backgroundGradientFromOpacity: 0,
-                            backgroundGradientToOpacity: 0,
-                            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`
-                        }}
-                    />
-                </Card.Content>
-            </Card> */}
-            <LiftCard>
-                <LiftCard.Left>
-                    <Text>squat</Text>
-                    <Text>deadlift</Text>
-                    <Text>ohp</Text>
-                    <Text>row</Text>
-                </LiftCard.Left>
-                <LiftCard.Content>
-                    <View style={{ flexDirection: 'row', flex: 1}}>
-                        <View style={{ backgroundColor: '#00ff00', flex: 1 }} />
-                        <View style={{ backgroundColor: '#00aa00', flex: 1 }} />
-                        <View style={{ backgroundColor: '#008800', flex: 1 }} />
-                        <View style={{ backgroundColor: '#006600', flex: 1 }} />
+        <Card style={{ width: width }}>
+            <Card.Content>
+                <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>{programTemplate.name}</Text>
+                <Text>Experience level: Intermediate/Advanced</Text>
+                <Text>Repeats every: {programTemplate.daysBetweenSameWorkout} days</Text>
+                {programTemplate.workoutStructure.map((structure, key) =>
+                    <View>
+                        <Text key={key}>{structure.name}</Text>
+                        {structure.variations.map((variation, key) =>
+                            <View key={key}>
+                                <Text>{variation.name}</Text>
+                                {variation.workouts.map((workout, key) =>
+                                    <View key={key}>
+                                        <Text>{workout.name}</Text>
+                                        {workout.movements.map((movement, key) =>
+                                            <View key={key}>
+                                                <Text>{movement.type}</Text>
+                                                {movement.sets.map((set, key) =>
+                                                    <View key={key}>
+                                                        <Text>{set.sets}x{set.reps}{set.amrap ? '+' : ''}</Text>
+                                                    </View>
+                                                )}
+                                            </View>
+                                        )}
+                                    </View>
+                                )}
+                            </View>
+                        )}
                     </View>
-                    <View style={{ flexDirection: 'row', flex: 1}}>
-                        <View style={{ backgroundColor: '#00aa00', flex: 1 }} />
-                        <View style={{ backgroundColor: '#008800', flex: 1 }} />
-                        <View style={{ backgroundColor: '#006600', flex: 1 }} />
-                        <View style={{ backgroundColor: '#008800', flex: 1 }} />
-                    </View>
-                    <View style={{ flexDirection: 'row', flex: 1}}>
-                        <View style={{ backgroundColor: '#008800', flex: 1 }} />
-                        <View style={{ backgroundColor: '#006600', flex: 1 }} />
-                        <View style={{ backgroundColor: '#008800', flex: 1 }} />
-                        <View style={{ backgroundColor: '#00aa00', flex: 1 }} />
-                    </View>
-                    <View style={{ flexDirection: 'row', flex: 1}}>
-                        <View style={{ backgroundColor: '#00aa00', flex: 1 }} />
-                        <View style={{ backgroundColor: '#008800', flex: 1 }} />
-                        <View style={{ backgroundColor: '#006600', flex: 1 }} />
-                        <View style={{ backgroundColor: '#008800', flex: 1 }} />
-                    </View>
-                </LiftCard.Content>
-            </LiftCard>
-        </ScrollView>
+                )}
+            </Card.Content>
+        </Card>
+    )
+}
+
+export default function NewProgram() {
+    const programs = [fiveThreeOne];
+    const styles = makeStyles();
+    const [width, setWidth] = useState(0);
+    const [height, setHeight] = useState(0);
+
+    const update = (event: LayoutChangeEvent) => {
+        setWidth(event.nativeEvent.layout.width)
+        setHeight(event.nativeEvent.layout.height)
+    }
+
+    return (
+        <View>
+            <ScrollView horizontal onLayout={update} style={styles.container}>
+                {/* <View style={[styles.container, {height: height, width: width * 4}]}> */}
+                <ProgramTemplateCard width={width} programTemplate={programs[0]} />
+                <ProgramTemplateCard width={width} programTemplate={programs[0]} />
+                <ProgramTemplateCard width={width} programTemplate={programs[0]} />
+                <ProgramTemplateCard width={width} programTemplate={programs[0]} />
+                <ProgramTemplateCard width={width} programTemplate={programs[0]} />
+                {/* </View> */}
+            </ScrollView>
+            <Stack.Screen options={{ title: 'Create Program', }} />
+        </View>
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        // padding: 0,
-        // flex: 1,
-        // backgroundColor: '#fff',
-        // alignItems: 'center',
-        // justifyContent: 'center',
-    },
-})
+function makeStyles() {
+    const theme = useTheme();
+
+    return StyleSheet.create({
+        header: {
+        },
+        container: {
+            // flex: 1,
+            // backgroundColor: 'red',
+            // flexDirection: 'row',
+        },
+    })
+}

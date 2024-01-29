@@ -1,39 +1,7 @@
-type WSet = {
-    reps: number,
-    sets: number,
-    amrap?: true | false | undefined,
-    percent: number,
-}
+import { ProgramTemplate } from '@/models';
+import { createContext } from 'react';
 
-type Variation = {
-    workouts: Workout[],
-    name: string,
-}
-
-type WorkoutStructure = {
-    name: string,
-    variations: Variation[],
-    optional?: boolean,
-}
-
-type Movement = {
-    type: string,
-    sets: WSet[],
-}
-
-type Workout = {
-    name: string,
-    movements: Movement[],
-}
-
-type ProgramTemplate = {
-    name: string,
-    type: "fullWorkout" | "perMovement",
-    workoutStructure: WorkoutStructure[],
-    daysBetweenSameWorkout: number,
-}
-
-const startingStrength: ProgramTemplate = {
+export const startingStrength: ProgramTemplate = {
     name: 'Starting Strength',
     type: 'fullWorkout',
     daysBetweenSameWorkout: 4,
@@ -109,7 +77,7 @@ const startingStrength: ProgramTemplate = {
     ]
 }
 
-const fiveThreeOne: ProgramTemplate = {
+export const fiveThreeOne: ProgramTemplate = {
     name: 'Five/Three/One',
     type: 'perMovement',
     daysBetweenSameWorkout: 7,
@@ -117,7 +85,33 @@ const fiveThreeOne: ProgramTemplate = {
         {
             name: 'Warmup',
             optional: true,
-            variations: []
+            variations: [
+                {
+                    name: "Typical",
+                    workouts: [{
+                        name: "",
+                        movements: [{
+                            type: "$primary",
+                            sets: [
+                                {
+                                    sets: 1,
+                                    reps: 5,
+                                    percent: 40,
+                                },
+                                {
+                                    sets: 1,
+                                    reps: 5,
+                                    percent: 50,
+                                },
+                                {
+                                    sets: 1,
+                                    reps: 3,
+                                    percent: 60,
+                                }
+                            ],
+                        }]
+                    }]
+                }]
         },
         {
             name: 'Assistance',
@@ -197,6 +191,28 @@ const fiveThreeOne: ProgramTemplate = {
                             },
                             ]
                         }]
+                    },, {
+                        name: '1s',
+                        movements: [{
+                            type: "$primary",
+                            sets: [{
+                                reps: 5,
+                                sets: 1,
+                                percent: 75,
+                            },
+                            {
+                                reps: 3,
+                                sets: 1,
+                                percent: 85,
+                            },
+                            {
+                                reps: 1,
+                                sets: 1,
+                                percent: 95,
+                                amrap: true,
+                            },
+                            ]
+                        }]
                     },]
                 }
             ],
@@ -225,4 +241,4 @@ const data = {
     },
 }
 
-export { fiveThreeOne }
+export const ProgramTemplateContext = createContext<ProgramTemplate[]>(null);

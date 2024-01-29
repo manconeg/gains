@@ -1,4 +1,4 @@
-import { Workout } from '@/data/types';
+import { Workout } from '@/models';
 import { ChronoUnit, Instant, ZoneId, LocalDate } from '@js-joda/core';
 import { createContext } from 'react';
 
@@ -32,6 +32,37 @@ export const workouts: Workout[] = [
                                 reps: 1,
                                 amrap: true,
                                 percent: .95,
+                                complete: false,
+                            },
+                        ],
+                    },
+                    {
+                        name: "Boring but Big",
+                        sets: [
+                            {
+                                reps: 10,
+                                amrap: false,
+                                percent: .5,
+                                complete: false,
+                            }, {
+                                reps: 10,
+                                amrap: false,
+                                percent: .5,
+                                complete: false,
+                            }, {
+                                reps: 10,
+                                amrap: false,
+                                percent: .5,
+                                complete: false,
+                            }, {
+                                reps: 10,
+                                amrap: false,
+                                percent: .5,
+                                complete: false,
+                            }, {
+                                reps: 10,
+                                amrap: false,
+                                percent: .5,
                                 complete: false,
                             },
                         ],

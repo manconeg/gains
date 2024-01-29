@@ -1,4 +1,4 @@
-import { Movement, Set } from "./data/types";
+import { Movement, Set } from "./models/Workout";
 
 export default function repMaxCalc(movement: Movement) {
     let allSets: Set[] = []

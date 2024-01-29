@@ -34,7 +34,7 @@ LiftCard.Content = ({ children }) => {
 
 LiftCard.Action = ({ children }) => {
     return (
-        <View style={{ flex: 1, justifyContent: 'center' }}>
+        <View style={{ justifyContent: 'center' }}>
             <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
                 {children}
             </View>

@@ -1,8 +1,8 @@
 import { TopSet } from '@/atoms'
-import { Movement } from '@/data/types'
+import { Movement } from '@/models'
 import { LiftCard } from '@/molecules/LiftCard'
 import { StyleSheet } from 'react-native'
-import { Text, useTheme, Icon } from 'react-native-paper'
+import { Icon, Text, useTheme } from 'react-native-paper'
 
 type MovementCardParams = {
     workoutId: number,

@@ -1,5 +1,5 @@
 import { TopSet } from '@/atoms'
-import { Workout } from '@/data/types'
+import { Workout } from '@/models'
 import { LiftCard } from '@/molecules'
 import { LocalDate } from '@js-joda/core'
 import { StyleSheet } from 'react-native'

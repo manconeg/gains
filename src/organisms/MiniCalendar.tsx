@@ -1,5 +1,5 @@
-import { Workout } from '@/data/types';
-import { ChronoField, ChronoUnit, DayOfWeek, TemporalAdjusters, LocalDate } from '@js-joda/core';
+import { Workout } from '@/models';
+import { ChronoField, DayOfWeek, LocalDate, TemporalAdjusters } from '@js-joda/core';
 import { StyleSheet, View } from 'react-native';
 import { Card, Divider, Text, useTheme } from 'react-native-paper';
 

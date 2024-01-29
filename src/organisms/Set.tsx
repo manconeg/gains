@@ -1,8 +1,7 @@
-import { Adjustable } from '@/atoms';
-import { PlateCalculator, LiftCard } from '@/molecules';
+import { LiftCard, PlateCalculator } from '@/molecules';
 import { useEffect, useState } from 'react';
-import { View } from 'react-native';
-import { Card, Checkbox, Text } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Checkbox, Text } from 'react-native-paper';
 
 type TrainingMaxWeight = {
   max: number,
@@ -14,6 +13,7 @@ export type SetParams = {
   reps: number,
   amrap: boolean,
   complete: boolean,
+  selected: boolean,
 }
 
 function calcWeight(max: number, percent: number) {
@@ -25,6 +25,7 @@ export function Set(params: SetParams) {
   const [isTrainingMax, setTrainingMax] = useState(typeof params.weight === "number")
   const [percent, setPercent] = useState(0)
   const [weight, setWeight] = useState(0)
+  const styles = makeStyles()
 
   useEffect(() => {
     if (typeof params.weight === "number") {
@@ -53,15 +54,43 @@ export function Set(params: SetParams) {
         <Checkbox status={checked ? 'checked' : 'unchecked'} onPress={() => setChecked(!checked)} />
       </LiftCard.Left>
       <LiftCard.Content>
-        <View style={{ flexDirection: 'row' }}>
-
-          {isTrainingMax
-            ? (<View style={{ flexDirection: 'row' }}><Text>{weight}</Text><Adjustable number={percent * 100} increment={5} formatFn={(count) => `${count}%`} onChange={(number, type) => setPercent(number / 100)} /></View>)
-            : <View style={{ flexDirection: 'row' }}><Adjustable number={weight} increment={5} onChange={(number, type) => setWeight(number)} /></View>}
+        {params.selected && <Text style={styles.currentSet}>Current set</Text>}
+        <View style={[styles.weightBox, params.selected && styles.selected]}>
+          <Text style={styles.weight}>{weight}</Text>
+          <View style={styles.lbsContainer}><Text style={styles.lbs}>lbs</Text></View>
         </View>
-        <Text>x{params.reps}{!params.amrap || '+'}</Text>
         <PlateCalculator weight={weight} />
       </LiftCard.Content>
+      <LiftCard.Action>
+        <Text>x{params.reps}{!params.amrap || '+'}</Text>
+      </LiftCard.Action>
     </LiftCard>
   )
+}
+
+function makeStyles() {
+  return StyleSheet.create({
+    weight: {
+      fontWeight: 'bold',
+      fontSize: 20,
+    },
+    weightBox: {
+      flexDirection: 'row',
+    },
+    selected: {
+      height: 100,
+    },
+    currentSet: {
+      textAlign: 'center',
+      fontWeight: 'bold',
+    },
+    lbs: {
+    },
+    lbsContainer: {
+      flexDirection: 'column',
+      justifyContent: 'flex-end',
+    },
+    fabStyle: {
+    },
+  })
 }
