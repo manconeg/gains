@@ -1,7 +1,7 @@
 import { LiftCard, PlateCalculator } from '@/molecules';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Checkbox, Text } from 'react-native-paper';
+import { Button, Checkbox, Text } from 'react-native-paper';
 
 type TrainingMaxWeight = {
   max: number,
@@ -60,6 +60,7 @@ export function Set(params: SetParams) {
           <View style={styles.lbsContainer}><Text style={styles.lbs}>lbs</Text></View>
         </View>
         <PlateCalculator weight={weight} />
+        <Button onPress={() => {}}>Start</Button>
       </LiftCard.Content>
       <LiftCard.Action>
         <Text>x{params.reps}{!params.amrap || '+'}</Text>
