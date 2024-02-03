@@ -3,34 +3,55 @@ import { StyleSheet, View } from "react-native"
 import { Button, Card, Text, Icon } from "react-native-paper"
 
 type TimerParams = {
-    seconds: number,
+    context: Context,
 }
 
 const millisInSecond = 1000
 
-export function Timer({ seconds }: TimerParams) {
+export function Timer({ context }: TimerParams) {
     const styles = makeStyles()
-    const [secondsLeft, setSecondsLeft] = useState(seconds)
+    const [secondsLeft, setSecondsLeft] = useState(context.startSeconds)
 
     useEffect(() => {
-        const interval = setInterval(() => setSecondsLeft(secondsLeft - 1), millisInSecond)
-        return () => clearInterval(interval)
-    })
+        if (context.active) {
+            const interval = setInterval(() => setSecondsLeft(secondsLeft => secondsLeft + context.direction), millisInSecond)
+            return () => clearInterval(interval)
+        }
+    }, [context.active])
 
     return (
+        (context.active ? 
         <Card style={styles.timer}>
             <Card.Content style={{ flexDirection: 'row' }}>
-                <Button><Icon source="cancel" size={20} /></Button>
+                <Button onPress={context.onFailure}><Icon source="cancel" size={20} /></Button>
                 <View style={{justifyContent: 'center',}}>
                     <View style={{ flexDirection: "row" }}>
-                        <Text>{Math.floor(secondsLeft / 60)}:{secondsLeft % 60}</Text><Text>/1:30</Text>
+                        <Text>{Math.floor(secondsLeft / 60)}:{Math.abs(secondsLeft) % 60}</Text>
+                        {context.doneSeconds ? 
+                        <Text>/{Math.floor(context.doneSeconds / 60)}:{Math.abs(context.doneSeconds) % 60}</Text>
+                        :null}
                     </View>
                 </View>
-                <Button><Icon source="check" size={20} /></Button>
+                <Button onPress={context.onSuccess}><Icon source="check" size={20} /></Button>
             </Card.Content>
-        </Card>
+        </Card> : '')
     )
 }
+
+enum Direction {
+    UP = 1, DOWN = -1
+}
+
+type Context = {
+    onSuccess: () => void,
+    onFailure: () => void,
+    direction: Direction,
+    startSeconds: number,
+    doneSeconds: number,
+    active: boolean,
+}
+
+Timer.Direction = Direction
 
 function makeStyles() {
     return StyleSheet.create({

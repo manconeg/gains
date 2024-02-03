@@ -1,16 +1,15 @@
 import { WorkoutContext } from '@/contexts/WorkoutContext';
 import { Graph, LiftCard, Timer } from '@/molecules';
-import { Set } from '@/organisms';
+import { SetCard } from '@/organisms';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { useContext, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { AnimatedFAB, Card, Text, Button } from 'react-native-paper';
+import { Set } from '@/models/Workout';
 
 const max = {
   "bp": 200
 }
-
-
 
 export default function Movement() {
   const workouts = useContext(WorkoutContext)
@@ -26,6 +25,14 @@ export default function Movement() {
 
   const [trainingMax, setTrainingMax] = useState(maxLift * trainingMaxPercent)
   const [createSet, setCreateSet] = useState(false)
+  const [timerContext, setTimerContext] = useState({
+    onSuccess: () => {},
+    onFailure: () => {},
+    direction: Timer.Direction.UP,
+    startSeconds: 0,
+    doneSeconds: 90,
+    active: false,
+  })
 
   const graphData = [{
     date: new Date('1995-12-17T03:24:00'),
@@ -46,6 +53,17 @@ export default function Movement() {
     date: new Date('1996-4-17T03:24:00'),
     value: 100,
   },]
+
+  const startTimer = (set: Set) => () => {
+    setTimerContext({
+      onSuccess: () => {set.complete = true},
+      onFailure: () => {},
+      direction: Timer.Direction.UP,
+      startSeconds: 0,
+      doneSeconds: 0,
+      active: true,
+    })
+  }
 
   return (
     <View>
@@ -68,17 +86,17 @@ export default function Movement() {
           {createSet &&
             <View>
               <Text style={styles.header}>New set</Text>
-              <Set selected={true} weight={{ max: movement.max, percent: trainingMaxPercent }} reps={5} amrap={false} complete={false} />
+              <SetCard onStart={startTimer} selected={true} weight={{ max: movement.max}} />
             </View>}
           {movement.setGroups.map((setGroup, key) => (
             <View key={key}>
               <Text style={styles.header}>{setGroup.name} sets</Text>
-              {setGroup.sets.map((set, key) => <Set key={key} weight={{ max: movement.max, percent: set.percent }} reps={5} amrap={set.amrap} selected={key == 0} complete={set.complete} />)}
+              {setGroup.sets.map((set, key) => <SetCard onStart={startTimer(set)} key={key} weight={{ max: movement.max }} set={set} selected={key == 0} />)}
             </View>
           ))}
         </View>
       </ScrollView>
-      <Timer seconds={90} />
+      <Timer context={timerContext} />
       <AnimatedFAB
         icon={'plus'}
         label={'Add set'}

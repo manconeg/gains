@@ -1,3 +1,4 @@
+import { Set } from '@/models/Workout';
 import { LiftCard, PlateCalculator } from '@/molecules';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -5,23 +6,22 @@ import { Button, Checkbox, Text } from 'react-native-paper';
 
 type TrainingMaxWeight = {
   max: number,
-  percent: number,
 }
 
 export type SetParams = {
   weight: number | TrainingMaxWeight,
-  reps: number,
-  amrap: boolean,
-  complete: boolean,
+  set: Set,
   selected: boolean,
+  onStart: (set: Set) => void,
 }
 
 function calcWeight(max: number, percent: number) {
   return Math.ceil((max * percent) / 5) * 5
 }
 
-export function Set(params: SetParams) {
-  const [checked, setChecked] = useState(params.complete);
+export function SetCard(params: SetParams) {
+  const {set, selected, onStart} = params
+  const [checked, setChecked] = useState(set.complete);
   const [isTrainingMax, setTrainingMax] = useState(typeof params.weight === "number")
   const [percent, setPercent] = useState(0)
   const [weight, setWeight] = useState(0)
@@ -34,7 +34,7 @@ export function Set(params: SetParams) {
     }
     else {
       setTrainingMax(true)
-      setPercent(params.weight.percent)
+      setPercent(set.percent)
       setWeight(params.weight.max * percent)
     }
   }, [params])
@@ -60,10 +60,10 @@ export function Set(params: SetParams) {
           <View style={styles.lbsContainer}><Text style={styles.lbs}>lbs</Text></View>
         </View>
         <PlateCalculator weight={weight} />
-        <Button onPress={() => {}}>Start</Button>
+        <Button onPress={() => onStart(set)}>Start</Button>
       </LiftCard.Content>
       <LiftCard.Action>
-        <Text>x{params.reps}{!params.amrap || '+'}</Text>
+        <Text>x{set.reps}{!set.amrap || '+'}</Text>
       </LiftCard.Action>
     </LiftCard>
   )
