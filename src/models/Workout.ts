@@ -23,6 +23,8 @@ export type SetGroup = {
 
 export type Set = {
     reps: number,
+    repsPerformed?: number,
+    weightPerformed?: number,
     amrap: boolean,
     percent: number,
     complete: boolean,

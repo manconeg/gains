@@ -1,35 +1,14 @@
-import { WorkoutContext } from '@/contexts';
-import { Graph } from '@/molecules';
+import { useWorkouts } from '@/contexts';
+import { ProgressGraph } from '@/molecules';
 import { MiniCalendar, WorkoutCard } from '@/organisms';
 import { Stack, router } from 'expo-router';
-import { useContext } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { AnimatedFAB, Text, useTheme } from 'react-native-paper';
 
 export default function App() {
-  const workouts = useContext(WorkoutContext);
+  const workouts = useWorkouts();
   const styles = makeStyles();
   // const fabStyle = { [animateFrom]: 16 };
-
-  const liftData = [{
-    date: new Date('1995-12-17T03:24:00'),
-    value: 50,
-  }, {
-    date: new Date('1996-1-17T03:24:00'),
-    value: 60,
-  }, {
-    date: new Date('1996-2-17T03:24:00'),
-    value: 70,
-  }, {
-    date: new Date('1996-2-17T03:24:00'),
-    value: 80,
-  }, {
-    date: new Date('1996-3-17T03:24:00'),
-    value: 90,
-  }, {
-    date: new Date('1996-4-17T03:24:00'),
-    value: 100,
-  },];
 
   return (
     <View>
@@ -43,7 +22,7 @@ export default function App() {
         <Text style={styles.header}>Week</Text>
         <MiniCalendar workouts={workouts} />
         <Text style={styles.header}>Stats</Text>
-        <Graph data={liftData} />
+        <ProgressGraph workouts={workouts} movement={"dl"} />
       </ScrollView>
       <AnimatedFAB
         icon={'plus'}

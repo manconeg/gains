@@ -1,11 +1,10 @@
-import { WorkoutContext } from '@/contexts/WorkoutContext';
+import { useWorkouts } from '@/contexts';
 import { MovementCard } from '@/organisms';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { useContext } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 
 export default function Workout() {
-  const workouts = useContext(WorkoutContext);
+  const workouts = useWorkouts();
   const { workoutId } = useLocalSearchParams<{ workoutId: string }>();
   // const params = useLocalSearchParams<WorkoutParams>()
 

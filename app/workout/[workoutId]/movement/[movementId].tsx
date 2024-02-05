@@ -1,24 +1,28 @@
-import { WorkoutContext } from '@/contexts/WorkoutContext';
-import { Graph, LiftCard, Timer } from '@/molecules';
+import { useWorkouts, useWorkoutsDispatch, WorkoutsActions } from '@/contexts';
+import { Set } from '@/models/Workout';
+import { LiftCard, LiftTimer, ProgressGraph } from '@/molecules';
 import { SetCard } from '@/organisms';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { AnimatedFAB, Card, Text, Button } from 'react-native-paper';
-import { Set } from '@/models/Workout';
+import { AnimatedFAB, Card, Text } from 'react-native-paper';
 
 const max = {
   "bp": 200
 }
 
 export default function Movement() {
-  const workouts = useContext(WorkoutContext)
-  const styles = makeStyles()
-  const { movementId, workoutId } = useLocalSearchParams<{ movementId: string, workoutId: string }>();
-  // const params = useLocalSearchParams<WorkoutParams>()
+  const workouts = useWorkouts()
+  const workoutsDispatch = useWorkoutsDispatch()
 
-  const workout = workouts[Number(workoutId)]
-  const movement = workout.movements[Number(movementId)]
+  const styles = makeStyles()
+  const { movementId, workoutId } = (() => {
+    const params = useLocalSearchParams<{ movementId: string, workoutId: string }>()
+    return { movementId: Number(params.movementId), workoutId: Number(params.workoutId)}
+  })()
+
+  const workout = workouts[workoutId]
+  const movement = workout.movements[movementId]
 
   const maxLift = max['bp']
   const trainingMaxPercent = .9
@@ -26,42 +30,31 @@ export default function Movement() {
   const [trainingMax, setTrainingMax] = useState(maxLift * trainingMaxPercent)
   const [createSet, setCreateSet] = useState(false)
   const [timerContext, setTimerContext] = useState({
-    onSuccess: () => {},
-    onFailure: () => {},
-    direction: Timer.Direction.UP,
-    startSeconds: 0,
-    doneSeconds: 90,
+    onComplete: (reps: number) => { },
     active: false,
+    set: {},
   })
 
-  const graphData = [{
-    date: new Date('1995-12-17T03:24:00'),
-    value: 50,
-  }, {
-    date: new Date('1996-1-17T03:24:00'),
-    value: 60,
-  }, {
-    date: new Date('1996-2-17T03:24:00'),
-    value: 70,
-  }, {
-    date: new Date('1996-2-17T03:24:00'),
-    value: 80,
-  }, {
-    date: new Date('1996-3-17T03:24:00'),
-    value: 90,
-  }, {
-    date: new Date('1996-4-17T03:24:00'),
-    value: 100,
-  },]
+  const recordSet = (setGroupId: number, mySet: Set, repsPerformed: number, weightPerformed: number) => {
+    workoutsDispatch({
+      type: WorkoutsActions.ADD_REPS,
+      workoutId,
+      movementId,
+      setGroupId,
+      setId: 1,
+      repsPerformed,
+      weightPerformed,
+    })
+  }
 
-  const startTimer = (set: Set) => () => {
+  const startTimer = (set: Set, setGroupId: number) => () => {
     setTimerContext({
-      onSuccess: () => {set.complete = true},
-      onFailure: () => {},
-      direction: Timer.Direction.UP,
-      startSeconds: 0,
-      doneSeconds: 0,
+      onComplete: (reps: number) => {
+        recordSet(setGroupId, set, reps, set.percent * maxLift)
+        setTimerContext({ active: false, onComplete: () => { }, set: set })
+      },
       active: true,
+      set: set,
     })
   }
 
@@ -79,24 +72,24 @@ export default function Movement() {
         <View>
           <Text style={styles.header}>Progress</Text>
           <Card>
-            <Graph data={graphData} />
+            <ProgressGraph workouts={workouts} movement={movement.name} />
           </Card>
         </View>
         <View>
           {createSet &&
             <View>
               <Text style={styles.header}>New set</Text>
-              <SetCard onStart={startTimer} selected={true} weight={{ max: movement.max}} />
+              <SetCard onStart={startTimer} selected={true} weight={{ max: movement.max }} />
             </View>}
           {movement.setGroups.map((setGroup, key) => (
             <View key={key}>
               <Text style={styles.header}>{setGroup.name} sets</Text>
-              {setGroup.sets.map((set, key) => <SetCard onStart={startTimer(set)} key={key} weight={{ max: movement.max }} set={set} selected={key == 0} />)}
+              {setGroup.sets.map((set, key) => <SetCard onStart={!timerContext.active && startTimer(set, key)} key={key} weight={{ max: movement.max }} set={set} selected={key == 0} />)}
             </View>
           ))}
         </View>
       </ScrollView>
-      <Timer context={timerContext} />
+      <LiftTimer {...timerContext} />
       <AnimatedFAB
         icon={'plus'}
         label={'Add set'}

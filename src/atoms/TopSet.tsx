@@ -1,9 +1,9 @@
-import repMaxCalc from '@/RepMaxCalc'
-import { Movement } from '@/data/types'
+import { repMaxCalc } from '@/RepMaxCalc'
+import { Movement } from '@/models'
 import { View } from 'react-native'
 import { Text } from 'react-native-paper'
 
-export function TopSet({ movement, large }: { movement: Movement, large: boolean }) {
+export function TopSet({ movement, large = undefined }: { movement: Movement, large?: boolean | undefined }) {
     let topSet = repMaxCalc(movement)
     return (
         <View>

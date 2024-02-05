@@ -1,3 +1,4 @@
+import { LocalDate } from "@js-joda/core";
 import { useState } from "react";
 import { LayoutChangeEvent, View } from "react-native";
 import { LineChart } from "react-native-chart-kit";
@@ -5,7 +6,7 @@ import { LineChart } from "react-native-chart-kit";
 export type GraphParams = {
   data:
   {
-    date: Date,
+    date: LocalDate,
     value: number,
   }[]
 }
@@ -15,8 +16,8 @@ export function Graph({
 }: GraphParams) {
   let dataSummary: number[] = []
   let labels = new Set<string>()
-  data.sort((dataPointA, dataPointB) => dataPointA.date.getTime() - dataPointB.date.getTime()).forEach((dataPoint) => {
-    labels.add(dataPoint.date.toLocaleString('default', { month: 'long' }))
+  data.sort((dataPointA, dataPointB) => dataPointA.date.toEpochDay() - dataPointB.date.toEpochDay()).forEach((dataPoint) => {
+    labels.add(dataPoint.date.month().name())
     dataSummary.push(dataPoint.value)
   })
 
@@ -26,6 +27,16 @@ export function Graph({
   const update = (event: LayoutChangeEvent) => {
     setWidth(event.nativeEvent.layout.width)
     setHeight(event.nativeEvent.layout.height)
+  }
+
+  if (!labels.size)
+  {
+    labels.add('Empty')
+  }
+
+  if (!dataSummary.length)
+  {
+    dataSummary.push(1)
   }
 
   return (

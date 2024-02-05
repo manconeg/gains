@@ -12,7 +12,7 @@ export type SetParams = {
   weight: number | TrainingMaxWeight,
   set: Set,
   selected: boolean,
-  onStart: (set: Set) => void,
+  onStart: false | ((set: Set) => void),
 }
 
 function calcWeight(max: number, percent: number) {
@@ -60,7 +60,7 @@ export function SetCard(params: SetParams) {
           <View style={styles.lbsContainer}><Text style={styles.lbs}>lbs</Text></View>
         </View>
         <PlateCalculator weight={weight} />
-        <Button onPress={() => onStart(set)}>Start</Button>
+        {onStart && <Button onPress={() => onStart(set)}>Start</Button>}
       </LiftCard.Content>
       <LiftCard.Action>
         <Text>x{set.reps}{!set.amrap || '+'}</Text>

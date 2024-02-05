@@ -1,4 +1,4 @@
-import { WorkoutContext, workouts } from '@/contexts/WorkoutContext'
+import { WorkoutsProvider } from '@/contexts/WorkoutsContext'
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
@@ -20,7 +20,7 @@ export default function HomeLayout() {
 
   return (
     <PaperProvider theme={paperTheme}>
-      <WorkoutContext.Provider value={workouts}>
+      <WorkoutsProvider>
         <Stack
           screenOptions={{
             // headerStyle: {...styles.header, backgroundColor: paperTheme.colors.primaryContainer},
@@ -36,7 +36,7 @@ export default function HomeLayout() {
             </Appbar.Header>),
             contentStyle: styles.container,
           }} />
-      </WorkoutContext.Provider>
+      </WorkoutsProvider>
       <StatusBar style="auto" />
     </PaperProvider>)
 }

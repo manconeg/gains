@@ -1,4 +1,4 @@
-import { WorkoutContext } from '@/contexts/WorkoutContext';
+import { useWorkouts } from '@/contexts';
 import { LiftCard } from '@/molecules';
 import { useContext } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
@@ -6,8 +6,8 @@ import { Text } from 'react-native-paper';
 import { RectProps } from 'react-native-svg';
 
 export default function Workout() {
-    const workouts = useContext(WorkoutContext);
-
+    const workouts = useWorkouts();
+    
     const commitsData = [
         { date: "2017-01-02", count: 1 },
         { date: "2017-01-03", count: 2 },
