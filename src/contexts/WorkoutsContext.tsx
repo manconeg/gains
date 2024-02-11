@@ -1,9 +1,15 @@
 import { Workout } from '@/models';
 import { ChronoUnit, LocalDate } from '@js-joda/core';
-import { createContext, useContext, useReducer, Dispatch } from 'react';
+import * as Crypto from 'expo-crypto';
+import { produce } from 'immer';
+import { Dispatch, createContext, useContext, useReducer } from 'react';
 
 const WorkoutsContext = createContext<Workout[]>([]);
 const WorkoutsDispatchContext = createContext<Dispatch<WorkoutsAction>>(null);
+
+function uuidv4() {
+    return Crypto.randomUUID()
+}
 
 export function useWorkouts() {
     return useContext(WorkoutsContext);
@@ -34,10 +40,10 @@ export enum WorkoutsActions {
 
 type WorkoutsAction = {
     type: WorkoutsActions.ADD_REPS,
-    workoutId: number,
-    movementId: number,
-    setGroupId: number,
-    setId: number,
+    workoutId: string,
+    movementId: string,
+    setGroupId: string,
+    setId: string,
     repsPerformed: number,
     weightPerformed: number,
 }
@@ -45,13 +51,17 @@ type WorkoutsAction = {
 function workoutsReducer(workouts: Workout[], action: WorkoutsAction) {
     switch (action.type) {
         case WorkoutsActions.ADD_REPS: {
-            const set = {
-                ...workouts[action.workoutId].movements[action.movementId].setGroups[action.setGroupId].sets[action.setId],
-                repsPerformed: action.repsPerformed,
-                weightPerformed: action.weightPerformed,
-            }
-            workouts[action.workoutId].movements[action.movementId].setGroups[action.setGroupId].sets[action.setId] = set
-            return [...workouts]
+            return produce(workouts, draft => {
+                let set = draft.find(workout => workout.id === action.workoutId)
+                    ?.movements.find(movement => movement.id === action.movementId)
+                    ?.setGroups.find(setGroup => setGroup.id === action.setGroupId)
+                    ?.sets.find(set => set.id === action.setId)
+
+                if (set) {
+                    set.repsPerformed = action.repsPerformed
+                    set.weightPerformed = action.weightPerformed
+                }
+            })
         }
         default: {
             throw Error('Unknown action: ' + action.type);
@@ -61,6 +71,7 @@ function workoutsReducer(workouts: Workout[], action: WorkoutsAction) {
 
 const initialWorkouts: Workout[] = [
     {
+        id: uuidv4(),
         date: LocalDate.now(),
         program: '531',
         variation: 'Classic',
@@ -68,24 +79,29 @@ const initialWorkouts: Workout[] = [
         complete: false,
         movements: [
             {
+                id: uuidv4(),
                 name: "Bench Press",
                 max: 240,
                 complete: false,
                 setGroups: [
                     {
+                        id: uuidv4(),
                         name: "Working",
                         sets: [
                             {
+                                id: uuidv4(),
                                 reps: 5,
                                 amrap: false,
                                 percent: .75,
                                 complete: false,
                             }, {
+                                id: uuidv4(),
                                 reps: 3,
                                 amrap: false,
                                 percent: .85,
                                 complete: false,
                             }, {
+                                id: uuidv4(),
                                 reps: 1,
                                 amrap: true,
                                 percent: .95,
@@ -94,29 +110,35 @@ const initialWorkouts: Workout[] = [
                         ],
                     },
                     {
+                        id: uuidv4(),
                         name: "Boring but Big",
                         sets: [
                             {
+                                id: uuidv4(),
                                 reps: 10,
                                 amrap: false,
                                 percent: .5,
                                 complete: false,
                             }, {
+                                id: uuidv4(),
                                 reps: 10,
                                 amrap: false,
                                 percent: .5,
                                 complete: false,
                             }, {
+                                id: uuidv4(),
                                 reps: 10,
                                 amrap: false,
                                 percent: .5,
                                 complete: false,
                             }, {
+                                id: uuidv4(),
                                 reps: 10,
                                 amrap: false,
                                 percent: .5,
                                 complete: false,
                             }, {
+                                id: uuidv4(),
                                 reps: 10,
                                 amrap: false,
                                 percent: .5,
@@ -128,6 +150,7 @@ const initialWorkouts: Workout[] = [
             },
         ],
     }, {
+        id: uuidv4(),
         date: LocalDate.now().minusMonths(1),
         program: '531',
         variation: 'Classic',
@@ -135,24 +158,29 @@ const initialWorkouts: Workout[] = [
         complete: true,
         movements: [
             {
+                id: uuidv4(),
                 name: "Bench Press",
                 max: 240,
                 complete: true,
                 setGroups: [
                     {
+                        id: uuidv4(),
                         name: "Working",
                         sets: [
                             {
+                                id: uuidv4(),
                                 reps: 5,
                                 amrap: false,
                                 percent: .75,
                                 complete: true,
                             }, {
+                                id: uuidv4(),
                                 reps: 3,
                                 amrap: false,
                                 percent: .85,
                                 complete: true,
                             }, {
+                                id: uuidv4(),
                                 reps: 1,
                                 amrap: true,
                                 percent: .95,
@@ -163,29 +191,35 @@ const initialWorkouts: Workout[] = [
                         ],
                     },
                     {
+                        id: uuidv4(),
                         name: "Boring but Big",
                         sets: [
                             {
+                                id: uuidv4(),
                                 reps: 10,
                                 amrap: false,
                                 percent: .5,
                                 complete: false,
                             }, {
+                                id: uuidv4(),
                                 reps: 10,
                                 amrap: false,
                                 percent: .5,
                                 complete: false,
                             }, {
+                                id: uuidv4(),
                                 reps: 10,
                                 amrap: false,
                                 percent: .5,
                                 complete: false,
                             }, {
+                                id: uuidv4(),
                                 reps: 10,
                                 amrap: false,
                                 percent: .5,
                                 complete: false,
                             }, {
+                                id: uuidv4(),
                                 reps: 10,
                                 amrap: false,
                                 percent: .5,
@@ -197,6 +231,7 @@ const initialWorkouts: Workout[] = [
             },
         ],
     }, {
+        id: uuidv4(),
         date: LocalDate.now().minusMonths(2),
         program: '531',
         variation: 'Classic',
@@ -204,24 +239,29 @@ const initialWorkouts: Workout[] = [
         complete: true,
         movements: [
             {
+                id: uuidv4(),
                 name: "Bench Press",
                 max: 240,
                 complete: true,
                 setGroups: [
                     {
+                        id: uuidv4(),
                         name: "Working",
                         sets: [
                             {
+                                id: uuidv4(),
                                 reps: 5,
                                 amrap: false,
                                 percent: .75,
                                 complete: true,
                             }, {
+                                id: uuidv4(),
                                 reps: 3,
                                 amrap: false,
                                 percent: .85,
                                 complete: true,
                             }, {
+                                id: uuidv4(),
                                 reps: 1,
                                 amrap: true,
                                 percent: .95,
@@ -232,29 +272,35 @@ const initialWorkouts: Workout[] = [
                         ],
                     },
                     {
+                        id: uuidv4(),
                         name: "Boring but Big",
                         sets: [
                             {
+                                id: uuidv4(),
                                 reps: 10,
                                 amrap: false,
                                 percent: .5,
                                 complete: false,
                             }, {
+                                id: uuidv4(),
                                 reps: 10,
                                 amrap: false,
                                 percent: .5,
                                 complete: false,
                             }, {
+                                id: uuidv4(),
                                 reps: 10,
                                 amrap: false,
                                 percent: .5,
                                 complete: false,
                             }, {
+                                id: uuidv4(),
                                 reps: 10,
                                 amrap: false,
                                 percent: .5,
                                 complete: false,
                             }, {
+                                id: uuidv4(),
                                 reps: 10,
                                 amrap: false,
                                 percent: .5,
@@ -266,6 +312,7 @@ const initialWorkouts: Workout[] = [
             },
         ],
     }, {
+        id: uuidv4(),
         date: LocalDate.now().minus(2, ChronoUnit.DAYS),
         program: '531',
         complete: true,
@@ -273,24 +320,29 @@ const initialWorkouts: Workout[] = [
         day: '5s',
         movements: [
             {
+                id: uuidv4(),
                 name: "Deadlift",
                 max: 400,
                 complete: true,
                 setGroups: [
                     {
+                        id: uuidv4(),
                         name: "Working",
                         sets: [
                             {
+                                id: uuidv4(),
                                 reps: 5,
                                 amrap: false,
                                 percent: .75,
                                 complete: true,
                             }, {
+                                id: uuidv4(),
                                 reps: 5,
                                 amrap: false,
                                 percent: .85,
                                 complete: true,
                             }, {
+                                id: uuidv4(),
                                 reps: 5,
                                 amrap: true,
                                 percent: .95,
@@ -302,6 +354,7 @@ const initialWorkouts: Workout[] = [
             },
         ],
     }, {
+        id: uuidv4(),
         date: LocalDate.now().plus(2, ChronoUnit.DAYS),
         program: '5x5',
         complete: true,
@@ -309,24 +362,29 @@ const initialWorkouts: Workout[] = [
         day: 'Workout A',
         movements: [
             {
+                id: uuidv4(),
                 name: "Deadlift",
                 max: 400,
                 complete: true,
                 setGroups: [
                     {
+                        id: uuidv4(),
                         name: "Working",
                         sets: [
                             {
+                                id: uuidv4(),
                                 reps: 5,
                                 amrap: false,
                                 percent: .75,
                                 complete: true,
                             }, {
+                                id: uuidv4(),
                                 reps: 5,
                                 amrap: false,
                                 percent: .85,
                                 complete: true,
                             }, {
+                                id: uuidv4(),
                                 reps: 5,
                                 amrap: true,
                                 percent: .95,
@@ -337,24 +395,29 @@ const initialWorkouts: Workout[] = [
                 ],
             },
             {
+                id: uuidv4(),
                 name: "Bench",
                 max: 200,
                 complete: true,
                 setGroups: [
                     {
+                        id: uuidv4(),
                         name: "Working",
                         sets: [
                             {
+                                id: uuidv4(),
                                 reps: 5,
                                 amrap: false,
                                 percent: .75,
                                 complete: true,
                             }, {
+                                id: uuidv4(),
                                 reps: 5,
                                 amrap: false,
                                 percent: .85,
                                 complete: true,
                             }, {
+                                id: uuidv4(),
                                 reps: 5,
                                 amrap: true,
                                 percent: .95,

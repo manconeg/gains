@@ -1,5 +1,5 @@
 import { useWorkouts, useWorkoutsDispatch, WorkoutsActions } from '@/contexts';
-import { Set } from '@/models/Workout';
+import { Set, SetGroup } from '@/models/Workout';
 import { LiftCard, LiftTimer, ProgressGraph } from '@/molecules';
 import { SetCard } from '@/organisms';
 import { Stack, useLocalSearchParams } from 'expo-router';
@@ -16,13 +16,17 @@ export default function Movement() {
   const workoutsDispatch = useWorkoutsDispatch()
 
   const styles = makeStyles()
-  const { movementId, workoutId } = (() => {
-    const params = useLocalSearchParams<{ movementId: string, workoutId: string }>()
-    return { movementId: Number(params.movementId), workoutId: Number(params.workoutId)}
-  })()
+  const { movementId, workoutId } = useLocalSearchParams<{ movementId: string, workoutId: string }>()
 
-  const workout = workouts[workoutId]
-  const movement = workout.movements[movementId]
+  const workout = workouts.find(workout => workout.id == workoutId)
+
+  if (workout === undefined)
+    return
+
+  const movement = workout.movements.find(movement => movement.id == movementId)
+
+  if (movement === undefined)
+    return
 
   const maxLift = max['bp']
   const trainingMaxPercent = .9
@@ -35,22 +39,22 @@ export default function Movement() {
     set: {},
   })
 
-  const recordSet = (setGroupId: number, mySet: Set, repsPerformed: number, weightPerformed: number) => {
+  const recordSet = (setGroup: SetGroup, mySet: Set, repsPerformed: number, weightPerformed: number) => {
     workoutsDispatch({
       type: WorkoutsActions.ADD_REPS,
-      workoutId,
-      movementId,
-      setGroupId,
-      setId: 1,
+      workoutId: workout.id,
+      movementId: movement.id,
+      setGroupId: setGroup.id,
+      setId: mySet.id,
       repsPerformed,
       weightPerformed,
     })
   }
 
-  const startTimer = (set: Set, setGroupId: number) => () => {
+  const startTimer = (set: Set, setGroup: SetGroup) => () => {
     setTimerContext({
       onComplete: (reps: number) => {
-        recordSet(setGroupId, set, reps, set.percent * maxLift)
+        recordSet(setGroup, set, reps, set.percent * maxLift)
         setTimerContext({ active: false, onComplete: () => { }, set: set })
       },
       active: true,
@@ -79,12 +83,12 @@ export default function Movement() {
           {createSet &&
             <View>
               <Text style={styles.header}>New set</Text>
-              <SetCard onStart={startTimer} selected={true} weight={{ max: movement.max }} />
+              <SetCard onStart={createSet} selected={true} weight={{ max: movement.max }} />
             </View>}
           {movement.setGroups.map((setGroup, key) => (
             <View key={key}>
               <Text style={styles.header}>{setGroup.name} sets</Text>
-              {setGroup.sets.map((set, key) => <SetCard onStart={!timerContext.active && startTimer(set, key)} key={key} weight={{ max: movement.max }} set={set} selected={key == 0} />)}
+              {setGroup.sets.map((set, key) => <SetCard onStart={!timerContext.active && startTimer(set, setGroup)} key={key} weight={{ max: movement.max }} set={set} selected={key == 0} />)}
             </View>
           ))}
         </View>

@@ -17,7 +17,7 @@ export default function App() {
         contentContainerStyle={{ padding: 3 }}>
         <View><Text style={styles.header}>Today's Programming</Text></View>
         <View style={styles.movement}>
-          {workouts.map((workout, key) => <WorkoutCard key={key} id={key} workout={workout} />)}
+          {workouts.map(workout => <WorkoutCard key={workout.id} workout={workout} />)}
         </View>
         <Text style={styles.header}>Week</Text>
         <MiniCalendar workouts={workouts} />

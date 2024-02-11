@@ -7,7 +7,6 @@ import { Icon, Text, useTheme } from 'react-native-paper'
 
 type LiftCardParams = {
     workout: Workout,
-    id: number,
 }
 
 function WorkoutSummary({ workout }: { workout: Workout }) {
@@ -18,13 +17,13 @@ function WorkoutSummary({ workout }: { workout: Workout }) {
     )
 }
 
-export function WorkoutCard({ id, workout }: LiftCardParams) {
+export function WorkoutCard({ workout }: LiftCardParams) {
     const styles = makeStyles();
 
     const isToday = LocalDate.now().equals(workout.date)
 
     return (
-        <LiftCard href={`workout/${id}`} mode={workout.complete ? 'contained' : 'elevated'}>
+        <LiftCard href={`workout/${workout.id}`} mode={workout.complete ? 'contained' : 'elevated'}>
             <LiftCard.Left>
                 <Icon source="camera" size={isToday ? 50 : 30} />
             </LiftCard.Left>

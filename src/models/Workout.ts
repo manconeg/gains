@@ -1,6 +1,7 @@
 import { LocalDate } from "@js-joda/core"
 
 export type Workout = {
+    id: string,
     date: LocalDate,
     program: string,
     variation: string,
@@ -10,6 +11,7 @@ export type Workout = {
 }
 
 export type Movement = {
+    id: string,
     name: string,
     max: number,
     complete: boolean,
@@ -17,11 +19,13 @@ export type Movement = {
 }
 
 export type SetGroup = {
+    id: string,
     name: string,
     sets: Set[],
 }
 
 export type Set = {
+    id: string,
     reps: number,
     repsPerformed?: number,
     weightPerformed?: number,

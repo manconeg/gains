@@ -5,16 +5,15 @@ import { StyleSheet } from 'react-native'
 import { Icon, Text, useTheme } from 'react-native-paper'
 
 type MovementCardParams = {
-    workoutId: number,
-    movementId: number,
+    workoutId: string,
     movement: Movement,
 }
 
-export function MovementCard({ workoutId, movementId, movement }: MovementCardParams) {
+export function MovementCard({ workoutId, movement }: MovementCardParams) {
     const styles = makeStyles();
 
     return (
-        <LiftCard href={`workout/${workoutId}/movement/${movementId}`} mode={movement.complete ? 'contained' : 'elevated'}>
+        <LiftCard href={`workout/${workoutId}/movement/${movement.id}`} mode={movement.complete ? 'contained' : 'elevated'}>
             <LiftCard.Left>
                 <Icon source="camera" size={50} />
             </LiftCard.Left>
