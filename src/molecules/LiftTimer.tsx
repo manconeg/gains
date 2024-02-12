@@ -1,9 +1,8 @@
-import { Timer } from '@/atoms'
+import { Adjustable, Timer } from '@/atoms'
+import { Set } from '@/models/Workout'
+import { useEffect, useState } from 'react'
 import { StyleSheet, View } from "react-native"
 import { Button, Card, Icon, Text } from "react-native-paper"
-import { useState, useEffect } from 'react'
-import { Adjustable } from '@/atoms'
-import { Set } from '@/models/Workout'
 
 type LiftTimerParams = {
     onComplete: (repsComplete: number) => void,
@@ -21,15 +20,21 @@ export function LiftTimer({ active, onComplete, set }: LiftTimerParams) {
         setRepsComplete(set.reps)
     }, [set])
 
-    const failedSetAction = () => setFailedSet(true)
+    useEffect(() => {
+        setFailedSet(!active && failedSet)
+    }, [active])
+
+    const failedSetAction = () => {
+        setFailedSet(true)
+    }
 
     return active && (
         <Card style={styles.timer}>
             {failedSet ? (
                 <Card.Content>
-                        <Text>Reps completed</Text>
-                        <Adjustable number={repsComplete} onChange={setRepsComplete} />
-                        <Button onPress={() => onComplete(repsComplete)}>Done</Button>
+                    <Text>Reps completed</Text>
+                    <Adjustable number={repsComplete} onChange={setRepsComplete} />
+                    <Button onPress={() => onComplete(repsComplete)}>Done</Button>
                 </Card.Content>
             ) : (
                 <Card.Content style={{ flexDirection: 'row' }}>

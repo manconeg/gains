@@ -3,6 +3,7 @@ import { LiftCard, PlateCalculator } from '@/molecules';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Checkbox, Text } from 'react-native-paper';
+import { red100 } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 type TrainingMaxWeight = {
   max: number,
@@ -55,15 +56,15 @@ export function SetCard(params: SetParams) {
       </LiftCard.Left>
       <LiftCard.Content>
         {params.selected && <Text style={styles.currentSet}>Current set</Text>}
-        <View style={[styles.weightBox, params.selected && styles.selected]}>
-          <Text style={styles.weight}>{weight}</Text>
-          <View style={styles.lbsContainer}><Text style={styles.lbs}>lbs</Text></View>
+        <View style={styles.weightBox}>
+          <Text style={[styles.weight, params.selected && styles.weightSelected]}>{weight}</Text>
+          {/* <View style={styles.lbsContainer}><Text style={styles.lbs}>lbs</Text></View> */}
+        <Text>x{set.reps}{!set.amrap || '+'}</Text>
         </View>
         <PlateCalculator weight={weight} />
-        {onStart && <Button onPress={() => onStart(set)}>Start</Button>}
       </LiftCard.Content>
       <LiftCard.Action>
-        <Text>x{set.reps}{!set.amrap || '+'}</Text>
+        {onStart && <Button onPress={() => onStart(set)}>Start</Button>}
       </LiftCard.Action>
     </LiftCard>
   )
@@ -75,11 +76,12 @@ function makeStyles() {
       fontWeight: 'bold',
       fontSize: 20,
     },
+    weightSelected: {
+      fontSize: 30,
+    },
     weightBox: {
       flexDirection: 'row',
-    },
-    selected: {
-      height: 100,
+      justifyContent: 'center',
     },
     currentSet: {
       textAlign: 'center',

@@ -4,12 +4,16 @@ import { Text } from "react-native-paper"
 
 const millisInSecond = 1000
 
+function padStart(number: Number) {
+    return String(number).padStart(2, '0')
+}
+
 export function Timer({ start, stop, direction, active }: { start: number, stop: number | false, direction: Direction, active: boolean }) {
     const styles = makeStyles()
     const [secondsLeft, setSecondsLeft] = useState(start)
-
     useEffect(() => {
         if (active) {
+            setSecondsLeft(start)
             const interval = setInterval(() => setSecondsLeft(secondsLeft => secondsLeft + direction), millisInSecond)
             return () => clearInterval(interval)
         }
@@ -17,8 +21,8 @@ export function Timer({ start, stop, direction, active }: { start: number, stop:
 
     return (
         <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-            <Text>{Math.floor(secondsLeft / 60)}:{Math.abs(secondsLeft) % 60}</Text>
-            {stop && <Text>/{Math.floor(stop / 60)}:{Math.abs(stop) % 60}</Text>}
+            <Text>{Math.floor(secondsLeft / 60)}:{padStart(Math.abs(secondsLeft) % 60)}</Text>
+            {stop && <Text>/{Math.floor(stop / 60)}:{padStart(Math.abs(stop) % 60)}</Text>}
         </View>
     )
 }

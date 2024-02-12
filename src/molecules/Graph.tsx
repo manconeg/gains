@@ -17,7 +17,7 @@ export function Graph({
   let dataSummary: number[] = []
   let labels = new Set<string>()
   data.sort((dataPointA, dataPointB) => dataPointA.date.toEpochDay() - dataPointB.date.toEpochDay()).forEach((dataPoint) => {
-    labels.add(dataPoint.date.month().name())
+    labels.add(`${dataPoint.date.month().ordinal() + 1}/${dataPoint.date.dayOfMonth()}`)
     dataSummary.push(dataPoint.value)
   })
 

@@ -48,6 +48,7 @@ export default function Movement() {
       setId: mySet.id,
       repsPerformed,
       weightPerformed,
+      complete: true,
     })
   }
 
@@ -76,7 +77,7 @@ export default function Movement() {
         <View>
           <Text style={styles.header}>Progress</Text>
           <Card>
-            <ProgressGraph workouts={workouts} movement={movement.name} />
+            <ProgressGraph workouts={workouts} movement={movement} />
           </Card>
         </View>
         <View>
@@ -85,10 +86,10 @@ export default function Movement() {
               <Text style={styles.header}>New set</Text>
               <SetCard onStart={createSet} selected={true} weight={{ max: movement.max }} />
             </View>}
-          {movement.setGroups.map((setGroup, key) => (
-            <View key={key}>
+          {[...movement.setGroups].sort((setGroupA, setGroupB) => !setGroupB.sets.find(set => !set.complete) ? -1 : 1).map(setGroup => (
+            <View key={setGroup.id}>
               <Text style={styles.header}>{setGroup.name} sets</Text>
-              {setGroup.sets.map((set, key) => <SetCard onStart={!timerContext.active && startTimer(set, setGroup)} key={key} weight={{ max: movement.max }} set={set} selected={key == 0} />)}
+              {[...setGroup.sets].sort((setA, setB) => setB.complete ? -1 : 1).map((set, position) => <SetCard onStart={!set.complete && !timerContext.active && startTimer(set, setGroup)} key={set.id} weight={{ max: movement.max }} set={set} selected={position == 0} />)}
             </View>
           ))}
         </View>

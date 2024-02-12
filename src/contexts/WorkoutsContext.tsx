@@ -46,6 +46,7 @@ type WorkoutsAction = {
     setId: string,
     repsPerformed: number,
     weightPerformed: number,
+    complete: boolean,
 }
 
 function workoutsReducer(workouts: Workout[], action: WorkoutsAction) {
@@ -60,6 +61,7 @@ function workoutsReducer(workouts: Workout[], action: WorkoutsAction) {
                 if (set) {
                     set.repsPerformed = action.repsPerformed
                     set.weightPerformed = action.weightPerformed
+                    set.complete = action.complete
                 }
             })
         }

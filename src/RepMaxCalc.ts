@@ -7,8 +7,6 @@ export function repMaxCalc(movement: Movement) {
 }
 
 export function repPerformedMaxCalc(movement: Movement) {
-    console.log('Calculating 1rm for movement')
-    console.log(movement.setGroups[0])
     return movement.setGroups
         .flatMap(setGroup => setGroup.sets)
         .filter(set => set.repsPerformed != undefined)
