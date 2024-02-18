@@ -2,25 +2,21 @@ import { LocalDate } from "@js-joda/core";
 import { useState } from "react";
 import { LayoutChangeEvent, View } from "react-native";
 import { LineChart } from "react-native-chart-kit";
+import { Dataset } from "react-native-chart-kit/dist/HelperTypes";
 
 export type GraphParams = {
-  data:
-  {
-    date: LocalDate,
-    value: number,
+  dataSets: {
+    data:
+    {
+      date: LocalDate,
+      value: number,
+    }[],
+    color: string
   }[]
 }
-
 export function Graph({
-  data,
+  dataSets,
 }: GraphParams) {
-  let dataSummary: number[] = []
-  let labels = new Set<string>()
-  data.sort((dataPointA, dataPointB) => dataPointA.date.toEpochDay() - dataPointB.date.toEpochDay()).forEach((dataPoint) => {
-    labels.add(`${dataPoint.date.month().ordinal() + 1}/${dataPoint.date.dayOfMonth()}`)
-    dataSummary.push(dataPoint.value)
-  })
-
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
 
@@ -29,14 +25,27 @@ export function Graph({
     setHeight(event.nativeEvent.layout.height)
   }
 
-  if (!labels.size)
-  {
-    labels.add('Empty')
-  }
+  let labels = new Set<string>()
 
-  if (!dataSummary.length)
-  {
-    dataSummary.push(1)
+  const processedDataSets:Dataset[] = []
+
+  dataSets.forEach(dataSet => {
+    let dataSummary: number[] = []
+    dataSet.data.sort((dataPointA, dataPointB) => dataPointA.date.toEpochDay() - dataPointB.date.toEpochDay()).forEach((dataPoint) => {
+      labels.add(`${dataPoint.date.month().ordinal() + 1}/${dataPoint.date.dayOfMonth()}`)
+      dataSummary.push(dataPoint.value)
+    })
+
+    const processedDatSet = {
+      data: dataSummary.length ? dataSummary : [1],
+      color: (opacity = 1) => dataSet.color,//`rgb(134, 65, 244, ${opacity})`, TODO: Replace this with a theme color
+    }
+
+    processedDataSets.push(processedDatSet)
+  })
+
+  if (!labels.size) {
+    labels.add('Empty')
   }
 
   return (
@@ -44,11 +53,7 @@ export function Graph({
       <LineChart
         data={{
           labels: Array.from(labels.values()),
-          datasets: [
-            {
-              data: dataSummary
-            }
-          ]
+          datasets: processedDataSets,
         }}
         width={width}
         height={220}

@@ -1,4 +1,4 @@
-import { Set } from '@/models/Workout';
+import { Set, SetGroup } from '@/models/Workout';
 import { LiftCard, PlateCalculator } from '@/molecules';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -11,6 +11,7 @@ type TrainingMaxWeight = {
 
 export type SetParams = {
   weight: number | TrainingMaxWeight,
+  setGroup: SetGroup,
   set: Set,
   selected: boolean,
   onStart: false | ((set: Set) => void),
@@ -21,8 +22,7 @@ function calcWeight(max: number, percent: number) {
 }
 
 export function SetCard(params: SetParams) {
-  const {set, selected, onStart} = params
-  const [checked, setChecked] = useState(set.complete);
+  const { set, setGroup, selected, onStart } = params
   const [isTrainingMax, setTrainingMax] = useState(typeof params.weight === "number")
   const [percent, setPercent] = useState(0)
   const [weight, setWeight] = useState(0)
@@ -52,15 +52,14 @@ export function SetCard(params: SetParams) {
   return (
     <LiftCard>
       <LiftCard.Left>
-        <Checkbox status={checked ? 'checked' : 'unchecked'} onPress={() => setChecked(!checked)} />
-      </LiftCard.Left>
-      <LiftCard.Content>
-        {params.selected && <Text style={styles.currentSet}>Current set</Text>}
         <View style={styles.weightBox}>
           <Text style={[styles.weight, params.selected && styles.weightSelected]}>{weight}</Text>
           {/* <View style={styles.lbsContainer}><Text style={styles.lbs}>lbs</Text></View> */}
-        <Text>x{set.reps}{!set.amrap || '+'}</Text>
+          <Text>x{set.reps}{!set.amrap || '+'}</Text>
         </View>
+      </LiftCard.Left>
+      <LiftCard.Content>
+        {params.selected && <Text style={styles.currentSet}>{setGroup.name}</Text>}
         <PlateCalculator weight={weight} />
       </LiftCard.Content>
       <LiftCard.Action>

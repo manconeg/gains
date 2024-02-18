@@ -19,7 +19,7 @@ export function PlateCalculator({ weight, plates = [45, 25, 10, 5, 2.5] }: Plate
     })
 
     return (
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
             {set.map((plate, key) => {
                 return (<Text key={key} style={{ marginRight: 10 }}>{plate}</Text>)
             })}

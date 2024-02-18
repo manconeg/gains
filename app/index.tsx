@@ -1,7 +1,7 @@
 import { useWorkouts } from '@/contexts';
 import { ProgressGraph } from '@/molecules';
 import { MiniCalendar, WorkoutCard } from '@/organisms';
-import { Stack, router } from 'expo-router';
+import { Stack } from 'expo-router';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { AnimatedFAB, Text, useTheme } from 'react-native-paper';
 
@@ -17,14 +17,14 @@ export default function App() {
         contentContainerStyle={{ padding: 3 }}>
         <View><Text style={styles.header}>Today's Programming</Text></View>
         <View style={styles.movement}>
-          {workouts.map(workout => <WorkoutCard key={workout.id} workout={workout} />)}
+          {[...workouts].sort((a, b) => b.complete ? -1 : 1).map(workout => <WorkoutCard key={workout.id} workout={workout} />)}
         </View>
         <Text style={styles.header}>Week</Text>
         <MiniCalendar workouts={workouts} />
         <Text style={styles.header}>Stats</Text>
-        <ProgressGraph workouts={workouts} movement={"dl"} />
+        <ProgressGraph workouts={workouts} />
       </ScrollView>
-      <AnimatedFAB
+      {/* <AnimatedFAB
         icon={'plus'}
         label={'New Workout'}
         extended={true}
@@ -33,7 +33,7 @@ export default function App() {
         animateFrom={'right'}
         // iconMode={'static'}
         style={[styles.fabStyle]}
-      />
+      /> */}
       <Stack.Screen options={{ title: 'In Thickness (and in health)', }} />
     </View>
   )

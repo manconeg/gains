@@ -1,10 +1,12 @@
 import { WorkoutsProvider } from '@/contexts/WorkoutsContext'
+import { LiftTimer } from '@/molecules'
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useMemo } from 'react'
 import { StyleSheet, useColorScheme } from 'react-native'
-import { Appbar, MD3DarkTheme, MD3LightTheme, Provider as PaperProvider, useTheme } from 'react-native-paper'
+import { AnimatedFAB, Appbar, MD3DarkTheme, MD3LightTheme, Provider as PaperProvider, useTheme } from 'react-native-paper'
+import { TimerProvider } from '@/contexts/TimerContext'
 
 export default function HomeLayout() {
   const colorScheme = useColorScheme()
@@ -21,21 +23,34 @@ export default function HomeLayout() {
   return (
     <PaperProvider theme={paperTheme}>
       <WorkoutsProvider>
-        <Stack
-          screenOptions={{
-            // headerStyle: {...styles.header, backgroundColor: paperTheme.colors.primaryContainer},
-            // headerTintColor: paperTheme.colors.primary,
-            // headerTitleStyle: {
-            //   // fontWeight: 'bold',
-            // },
-            header: (params) => (<Appbar.Header>
-              {params.back ? <Appbar.BackAction onPress={() => params.navigation.goBack()} /> : ''}
-              <Appbar.Content title={params.options.title} />
-              {/* <Appbar.Action icon="calendar" onPress={() => {}} />
-                <Appbar.Action icon="magnify" onPress={() => {}} /> */}
-            </Appbar.Header>),
-            contentStyle: styles.container,
-          }} />
+        <TimerProvider>
+          <Stack
+            screenOptions={{
+              // headerStyle: {...styles.header, backgroundColor: paperTheme.colors.primaryContainer},
+              // headerTintColor: paperTheme.colors.primary,
+              // headerTitleStyle: {
+              //   // fontWeight: 'bold',
+              // },
+              header: (params) => (<Appbar.Header>
+                {params.back ? <Appbar.BackAction onPress={() => params.navigation.goBack()} /> : ''}
+                <Appbar.Content title={params.options.title} />
+                {/* <Appbar.Action icon="calendar" onPress={() => {}} />
+                  <Appbar.Action icon="magnify" onPress={() => {}} /> */}
+              </Appbar.Header>),
+              contentStyle: styles.container,
+            }} />
+          <LiftTimer />
+          {/* <AnimatedFAB
+            icon={'plus'}
+            label={'Add set'}
+            extended={true}
+            onPress={() => { }}
+            visible={false}
+            animateFrom={'right'}
+            // iconMode={'static'}
+            style={[styles.fabStyle]}
+          /> */}
+        </TimerProvider>
       </WorkoutsProvider>
       <StatusBar style="auto" />
     </PaperProvider>)
@@ -54,6 +69,12 @@ function makeStyles() {
       // alignItems: 'center',
       // justifyContent: 'center',
       backgroundColor: theme.colors.background,
+      marginHorizontal: 10,
+    },
+    fabStyle: {
+      bottom: 16,
+      right: 16,
+      position: 'absolute',
     },
   })
 }

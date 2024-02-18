@@ -3,6 +3,7 @@ import { Set } from '@/models/Workout'
 import { useEffect, useState } from 'react'
 import { StyleSheet, View } from "react-native"
 import { Button, Card, Icon, Text } from "react-native-paper"
+import { useTimer } from '@/contexts/TimerContext'
 
 type LiftTimerParams = {
     onComplete: (repsComplete: number) => void,
@@ -10,14 +11,15 @@ type LiftTimerParams = {
     set: Set,
 }
 
-export function LiftTimer({ active, onComplete, set }: LiftTimerParams) {
+export function LiftTimer() {
+    const { active, onComplete, set } = useTimer()
     const styles = makeStyles()
     const timerDirection = Timer.Direction.UP
     const [failedSet, setFailedSet] = useState(false)
     const [repsComplete, setRepsComplete] = useState(0)
 
     useEffect(() => {
-        setRepsComplete(set.reps)
+        if(set) setRepsComplete(set.reps)
     }, [set])
 
     useEffect(() => {
