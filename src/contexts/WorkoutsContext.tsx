@@ -1,8 +1,9 @@
+import { getData } from '@/LoadCSV';
 import { Workout } from '@/models';
 import { ChronoUnit, LocalDate } from '@js-joda/core';
 import * as Crypto from 'expo-crypto';
 import { produce } from 'immer';
-import { Dispatch, createContext, useContext, useReducer } from 'react';
+import { Dispatch, createContext, useContext, useEffect, useReducer } from 'react';
 
 const WorkoutsContext = createContext<Workout[]>([]);
 const WorkoutsDispatchContext = createContext<Dispatch<WorkoutsAction>>(null);
@@ -19,11 +20,23 @@ export function useWorkoutsDispatch() {
     return useContext(WorkoutsDispatchContext);
 }
 
+let loaded = false
+
 export function WorkoutsProvider({ children }: { children: React.ReactNode }) {
     const [workouts, dispatch] = useReducer(
         workoutsReducer,
         initialWorkouts,
     );
+
+    if (!loaded) {
+        loaded = true
+        getData().then(workouts => {
+            dispatch({
+                type: WorkoutsActions.ADD_WORKOUTS,
+                workouts: workouts,
+            })
+        })
+    }
 
     return (
         <WorkoutsContext.Provider value={workouts}>
@@ -35,10 +48,24 @@ export function WorkoutsProvider({ children }: { children: React.ReactNode }) {
 }
 
 export enum WorkoutsActions {
-    ADD_REPS
+    ADD_REPS,
+    ADD_WORKOUT,
+    ADD_WORKOUTS,
 }
 
-type WorkoutsAction = {
+type WorkoutsAction = AddRepsAction | AddWorkoutAction | AddWorkoutsAction
+
+type AddWorkoutAction = {
+    type: WorkoutsActions.ADD_WORKOUT,
+    workout: Workout,
+}
+
+type AddWorkoutsAction = {
+    type: WorkoutsActions.ADD_WORKOUTS,
+    workouts: Workout[],
+}
+
+type AddRepsAction = {
     type: WorkoutsActions.ADD_REPS,
     workoutId: string,
     movementId: string,
@@ -64,6 +91,12 @@ function workoutsReducer(workouts: Workout[], action: WorkoutsAction) {
                     set.complete = action.complete
                 }
             })
+        }
+        case WorkoutsActions.ADD_WORKOUT: {
+            return [...workouts, action.workout]
+        }
+        case WorkoutsActions.ADD_WORKOUTS: {
+            return [...workouts, ...action.workouts]
         }
         default: {
             throw Error('Unknown action: ' + action.type);

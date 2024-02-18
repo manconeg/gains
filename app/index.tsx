@@ -4,9 +4,12 @@ import { MiniCalendar, WorkoutCard } from '@/organisms';
 import { Stack } from 'expo-router';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { AnimatedFAB, Text, useTheme } from 'react-native-paper';
+import Workout from './workout/newWorkout';
+import { LocalDate } from '@js-joda/core';
 
 export default function App() {
-  const workouts = useWorkouts();
+  const allWorkouts = useWorkouts();
+  const workouts = allWorkouts.filter(workout => workout.date.isAfter(LocalDate.now().minusMonths(1)));
   const styles = makeStyles();
   // const fabStyle = { [animateFrom]: 16 };
 

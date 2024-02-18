@@ -23,28 +23,28 @@ enum GraphType {
 let calculateData = (graphType: GraphType, workouts: Workout[], movement: Movement | undefined): GraphData => {
     var startDate: LocalDate
     switch(graphType) {
-        case GraphType.MONTH: startDate = LocalDate.now().minusMonths(1)
-        case GraphType.THREE_MONTH: startDate = LocalDate.now().minusMonths(3)
-        case GraphType.YEAR: startDate = LocalDate.now().minusMonths(12)
+        case GraphType.MONTH: startDate = LocalDate.now().minusMonths(1); break;
+        case GraphType.THREE_MONTH: startDate = LocalDate.now().minusMonths(3); break;
+        case GraphType.YEAR: startDate = LocalDate.now().minusMonths(12); break;
         case GraphType.ALL: startDate = LocalDate.EPOCH_0
         // default: throw "Invalid  start date"
     }
 
     var data = workouts
+        .filter(workout => workout.date.isAfter(startDate))
         .sort((workoutA, workoutB) => workoutA.date.toEpochDay() - workoutB.date.toEpochDay())
-        .filter(workout => graphType === GraphType.ALL || workout.date.isAfter(startDate))
         .flatMap<{ date: LocalDate, value: number }>(workout => {
             return workout.movements
                 // .filter(workoutMovement => console.log(workoutMovement.name + " " + movement))
                 .filter(workoutMovement => !movement || workoutMovement.name == movement.name)
                 .map(workoutMovement => {
+                    // console.log(workoutMovement.setGroups[0].sets)
                     return {
                         date: workout.date,
                         value: repPerformedMaxCalc(workoutMovement),
                     }
                 })
         })
-    console.log(data)
     return data
 }
 
