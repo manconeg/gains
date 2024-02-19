@@ -53,7 +53,7 @@ export default function Movement() {
     timerDispatch({
       type: TimerActions.START_TIMER,
       onComplete: (reps: number) => {
-        recordSet(setGroup, set, reps, set.percent * maxLift)
+        recordSet(setGroup, set, reps, set.percent * trainingMax)
         timerDispatch({ type: TimerActions.STOP_TIMER })
       },
       active: true,

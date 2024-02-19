@@ -115,7 +115,7 @@ const initialWorkouts: Workout[] = [
         movements: [
             {
                 id: uuidv4(),
-                name: "Bench Press",
+                name: "BENCH",
                 max: 240,
                 complete: false,
                 setGroups: [
@@ -194,7 +194,7 @@ const initialWorkouts: Workout[] = [
         movements: [
             {
                 id: uuidv4(),
-                name: "Bench Press",
+                name: "BENCH",
                 max: 240,
                 complete: true,
                 setGroups: [
@@ -275,7 +275,7 @@ const initialWorkouts: Workout[] = [
         movements: [
             {
                 id: uuidv4(),
-                name: "Bench Press",
+                name: "BENCH",
                 max: 240,
                 complete: true,
                 setGroups: [
@@ -356,7 +356,7 @@ const initialWorkouts: Workout[] = [
         movements: [
             {
                 id: uuidv4(),
-                name: "Deadlift",
+                name: "DEADLIFT",
                 max: 400,
                 complete: true,
                 setGroups: [
@@ -398,7 +398,7 @@ const initialWorkouts: Workout[] = [
         movements: [
             {
                 id: uuidv4(),
-                name: "Deadlift",
+                name: "DEADLIFT",
                 max: 400,
                 complete: true,
                 setGroups: [

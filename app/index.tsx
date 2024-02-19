@@ -1,15 +1,15 @@
 import { useWorkouts } from '@/contexts';
-import { ProgressGraph } from '@/molecules';
+import { ProgressGraph, RestCard } from '@/molecules';
 import { MiniCalendar, WorkoutCard } from '@/organisms';
+import { LocalDate } from '@js-joda/core';
 import { Stack } from 'expo-router';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { AnimatedFAB, Text, useTheme } from 'react-native-paper';
-import Workout from './workout/newWorkout';
-import { LocalDate } from '@js-joda/core';
+import { Text, useTheme } from 'react-native-paper';
 
 export default function App() {
   const allWorkouts = useWorkouts();
-  const workouts = allWorkouts.filter(workout => workout.date.isAfter(LocalDate.now().minusMonths(1)));
+  const todayLocal = LocalDate.now()
+  const workouts = allWorkouts.filter(workout => workout.date.isEqual(todayLocal));
   const styles = makeStyles();
   // const fabStyle = { [animateFrom]: 16 };
 
@@ -18,14 +18,14 @@ export default function App() {
       <ScrollView
         style={styles.container}
         contentContainerStyle={{ padding: 3 }}>
-        <View><Text style={styles.header}>Today's Programming</Text></View>
+        <View><Text style={styles.header}>TODAY</Text></View>
         <View style={styles.movement}>
-          {[...workouts].sort((a, b) => b.complete ? -1 : 1).map(workout => <WorkoutCard key={workout.id} workout={workout} />)}
+          {workouts.length ? [...workouts].sort((a, b) => b.complete ? -1 : 1).map(workout => <WorkoutCard key={workout.id} workout={workout} />) : <RestCard />}
         </View>
-        <Text style={styles.header}>Week</Text>
+        <Text style={styles.header}>THIS WEEK</Text>
         <MiniCalendar workouts={workouts} />
-        <Text style={styles.header}>Stats</Text>
-        <ProgressGraph workouts={workouts} />
+        <Text style={styles.header}>PROGRESS</Text>
+        <ProgressGraph workouts={allWorkouts} />
       </ScrollView>
       {/* <AnimatedFAB
         icon={'plus'}

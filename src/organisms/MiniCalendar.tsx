@@ -10,15 +10,17 @@ type MiniCalendarParams = {
 export function MiniCalendar({ workouts }: MiniCalendarParams) {
     const styles = makeStyles();
     const todayLocal = LocalDate.now()
-    const pastSunday = todayLocal.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY))
-    const thisSaturday = todayLocal.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+    const pastSunday = todayLocal.with(TemporalAdjusters.previous(DayOfWeek.SATURDAY))
+    const thisSaturday = todayLocal.with(TemporalAdjusters.next(DayOfWeek.SATURDAY))
 
     const activities: Workout[][] = [[], [], [], [], [], [], []]
 
     workouts
         .filter(workout => workout.date.isAfter(pastSunday))
         .filter(workout => workout.date.isBefore(thisSaturday))
-        .forEach(workout => activities[workout.date.get(ChronoField.DAY_OF_WEEK)].push(workout))
+        .forEach(workout => activities[workout.date.get(ChronoField.DAY_OF_WEEK) - 1].push(workout))
+
+    activities.unshift(activities.pop()!)
 
     return (
         <View>

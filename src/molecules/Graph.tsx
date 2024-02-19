@@ -11,7 +11,7 @@ export type GraphParams = {
       date: LocalDate,
       value: number,
     }[],
-    color: string
+    color: String,
   }[]
 }
 export function Graph({
