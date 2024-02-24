@@ -3,7 +3,7 @@ import { Movement, Workout } from "@/models";
 import { LocalDate } from "@js-joda/core";
 import { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, Text } from "react-native-paper";
 import { Graph } from "./Graph";
 
 export type GraphParams = {
@@ -46,6 +46,7 @@ let calculateData = (graphType: GraphType, workouts: Workout[], movement: Moveme
                     })
                 })
         })
+    console.log(data)
     return data
 }
 
@@ -53,8 +54,8 @@ export function ProgressGraph({
     workouts,
     movement,
 }: GraphParams) {
-    const [graphType, setGraphType] = useState(GraphType.YEAR)
-    const [data, setData] = useState(calculateData(graphType, workouts, movement))
+    const [graphType, setGraphType] = useState(GraphType.MONTH)
+    const [data, setData] = useState(new Map())
 
     useEffect(() => {
         setData(calculateData(graphType, workouts, movement))
@@ -69,13 +70,15 @@ export function ProgressGraph({
 
     return (
         <View>
-            <Graph dataSets={dataSets} />
-            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', }}>
-                <Button disabled={graphType == GraphType.YEAR} onPress={() => setGraphType(GraphType.YEAR)}>Year</Button>
-                <Button disabled={graphType == GraphType.MONTH} onPress={() => setGraphType(GraphType.MONTH)}>Month</Button>
-                <Button disabled={graphType == GraphType.THREE_MONTH} onPress={() => setGraphType(GraphType.THREE_MONTH)}>3 Months</Button>
-                <Button disabled={graphType == GraphType.ALL} onPress={() => setGraphType(GraphType.ALL)}>All</Button>
-            </View>
+            {dataSets.length ? <>
+                <Graph dataSets={dataSets} />
+                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', }}>
+                    <Button disabled={graphType == GraphType.MONTH} onPress={() => setGraphType(GraphType.MONTH)}>Month</Button>
+                    <Button disabled={graphType == GraphType.THREE_MONTH} onPress={() => setGraphType(GraphType.THREE_MONTH)}>3 Months</Button>
+                    <Button disabled={graphType == GraphType.YEAR} onPress={() => setGraphType(GraphType.YEAR)}>Year</Button>
+                    <Button disabled={graphType == GraphType.ALL} onPress={() => setGraphType(GraphType.ALL)}>All</Button>
+                </View>
+            </> : <Text>No data</Text>}
         </View>
     )
 }

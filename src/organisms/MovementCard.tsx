@@ -1,8 +1,7 @@
-import { TopSet } from '@/atoms'
-import { Movement } from '@/models'
-import { LiftCard } from '@/molecules/LiftCard'
-import { StyleSheet } from 'react-native'
-import { Icon, Text, useTheme } from 'react-native-paper'
+import { Movement } from '@/models';
+import { Link } from 'expo-router';
+import { StyleSheet, View } from 'react-native';
+import { Button, Text, useTheme } from 'react-native-paper';
 
 type MovementCardParams = {
     workoutId: string,
@@ -13,17 +12,16 @@ export function MovementCard({ workoutId, movement }: MovementCardParams) {
     const styles = makeStyles();
 
     return (
-        <LiftCard href={`workout/${workoutId}/movement/${movement.id}`} mode={movement.complete ? 'contained' : 'elevated'}>
-            <LiftCard.Left>
-                <Icon source="camera" size={50} />
-            </LiftCard.Left>
-            <LiftCard.Content>
-                <TopSet movement={movement} />
-            </LiftCard.Content>
-            <LiftCard.Action>
-                <Text>{movement.complete ? 'Complete ' : ''}&gt;</Text>
-            </LiftCard.Action>
-        </LiftCard>
+        <View style={{ alignItems: 'center' }}>
+            <Link href={`workout/${workoutId}/movement/${movement.id}`}><Button>{movement.name}</Button></Link>
+            {movement.setGroups.map(setGroup =>
+                <View key={setGroup.id} style={{ alignItems: 'center' }}>
+                    <Text style={{ alignSelf: 'center' }}>{setGroup.name}</Text>
+                    {setGroup.sets.map(set =>
+                        <Text key={set.id}>{movement.max * set.percent}x{set.reps}{set.amrap && '+'}</Text>
+                    )}
+                </View>)}
+        </View>
     )
 }
 

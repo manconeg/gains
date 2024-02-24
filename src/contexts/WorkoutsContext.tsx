@@ -4,6 +4,7 @@ import { ChronoUnit, LocalDate } from '@js-joda/core';
 import * as Crypto from 'expo-crypto';
 import { produce } from 'immer';
 import { Dispatch, createContext, useContext, useEffect, useReducer } from 'react';
+import * as FileSystem from 'expo-file-system'
 
 const WorkoutsContext = createContext<Workout[]>([]);
 const WorkoutsDispatchContext = createContext<Dispatch<WorkoutsAction>>(null);
@@ -20,23 +21,13 @@ export function useWorkoutsDispatch() {
     return useContext(WorkoutsDispatchContext);
 }
 
-let loaded = false
-
 export function WorkoutsProvider({ children }: { children: React.ReactNode }) {
     const [workouts, dispatch] = useReducer(
         workoutsReducer,
         initialWorkouts,
     );
 
-    if (!loaded) {
-        loaded = true
-        getData().then(workouts => {
-            dispatch({
-                type: WorkoutsActions.ADD_WORKOUTS,
-                workouts: workouts,
-            })
-        })
-    }
+    initialLoad(dispatch)
 
     return (
         <WorkoutsContext.Provider value={workouts}>
@@ -51,9 +42,15 @@ export enum WorkoutsActions {
     ADD_REPS,
     ADD_WORKOUT,
     ADD_WORKOUTS,
+    LOAD_WORKOUTS,
 }
 
-type WorkoutsAction = AddRepsAction | AddWorkoutAction | AddWorkoutsAction
+type WorkoutsAction = AddRepsAction | AddWorkoutAction | AddWorkoutsAction | LoadWorkoutsAction
+
+type LoadWorkoutsAction = {
+    type: WorkoutsActions.LOAD_WORKOUTS,
+    workouts: Workout[],
+}
 
 type AddWorkoutAction = {
     type: WorkoutsActions.ADD_WORKOUT,
@@ -76,8 +73,40 @@ type AddRepsAction = {
     complete: boolean,
 }
 
+let loaded = false
+
+function initialLoad(dispatch: Dispatch<WorkoutsAction>) {
+    if (!loaded) {
+        console.log('Loading')
+        loaded = true
+        loadWorkouts().then(workoutsString => {
+            dispatch({
+                type: WorkoutsActions.LOAD_WORKOUTS,
+                workouts: JSON.parse(workoutsString, function (key, value) {
+                    if (typeof value === 'string') {
+                        try {
+                            let data = LocalDate.parse(value)
+                            return data
+                        } catch(err) {}
+                    }
+                    return value;
+                }),
+            })
+        }).catch(error => {
+            console.error(error)
+        })
+        // getData().then(workouts => {
+        //     dispatch({
+        //         type: WorkoutsActions.ADD_WORKOUTS,
+        //         workouts: workouts,
+        //     })
+        // })
+    }
+}
+
 function workoutsReducer(workouts: Workout[], action: WorkoutsAction) {
-    switch (action.type) {
+    const newWorkouts = (() => {
+         switch (action.type) {
         case WorkoutsActions.ADD_REPS: {
             return produce(workouts, draft => {
                 let set = draft.find(workout => workout.id === action.workoutId)
@@ -98,10 +127,26 @@ function workoutsReducer(workouts: Workout[], action: WorkoutsAction) {
         case WorkoutsActions.ADD_WORKOUTS: {
             return [...workouts, ...action.workouts]
         }
-        default: {
-            throw Error('Unknown action: ' + action.type);
+        case WorkoutsActions.LOAD_WORKOUTS: {
+            return [...action.workouts]
         }
-    }
+    }})()
+
+    persistWorkouts(newWorkouts)
+
+    return newWorkouts
+}
+
+function persistWorkouts(workouts: Workout[]) {
+    const uri = `${FileSystem.documentDirectory}save.json`
+    console.log(uri)
+    FileSystem.writeAsStringAsync(uri, JSON.stringify(workouts))
+}
+
+function loadWorkouts() {
+    const uri = `${FileSystem.documentDirectory}save.json`
+    console.log(`loading ${uri}`)
+    return FileSystem.readAsStringAsync(uri)
 }
 
 const initialWorkouts: Workout[] = [

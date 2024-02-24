@@ -1,16 +1,22 @@
 import { Set } from '@/models/Workout';
 import { Dispatch, createContext, useContext, useReducer } from 'react';
 
+export enum SetStatus {
+    TIMING, RECORDING, NONE, RESTING,
+}
+
 type TimerContext = {
-    onComplete: (reps: number) => void,
-    active: boolean,
-    set?: Set,
+    onTimerComplete?: () => void,
+    onRecordResult?: (reps: number, seconds: number) => void,
+    state: SetStatus,
+    initialReps?: number,
 }
 
 const initialTimerContext: TimerContext = {
-    onComplete: (reps: number) => { },
-    active: false,
-    set: undefined,
+    onTimerComplete: () => {},
+    onRecordResult: () => {},
+    state: SetStatus.NONE,
+    initialReps: 0,
 }
 
 const TimerContext = createContext<TimerContext>(initialTimerContext);
@@ -41,31 +47,46 @@ export function TimerProvider({ children }: { children: React.ReactNode }) {
 
 export enum TimerActions {
     START_TIMER,
-    STOP_TIMER
+    STOP_TIMER,
+    RECORD_REPS,
 }
 
-type TimerAction = | StartTimer | StopTimer
+type TimerAction = StartTimer | StopTimer | RecordReps
+
 type StartTimer = {
     type: TimerActions.START_TIMER,
-} & TimerContext
+    onTimerComplete: () => void,
+}
+
 type StopTimer = {
     type: TimerActions.STOP_TIMER,
+}
+
+type RecordReps = {
+    type: TimerActions.RECORD_REPS,
+    initialReps: number,
+    onComplete: (reps: number, seconds: number) => void,
 }
 
 function timerReducer(timerContext: TimerContext, action: TimerAction): TimerContext {
     switch (action.type) {
         case TimerActions.START_TIMER: {
-            return action
+            return {
+                state: SetStatus.TIMING,
+                onTimerComplete: action.onTimerComplete,
+            }
+        }
+        case TimerActions.RECORD_REPS: {
+            return {
+                state: SetStatus.RECORDING,
+                onRecordResult: action.onComplete,
+                initialReps: action.initialReps,
+            }
         }
         case TimerActions.STOP_TIMER: {
             return {
-                active: false,
-                onComplete: () => { },
-                set: undefined,
+                state: SetStatus.NONE
             }
-        }
-        default: {
-            throw Error('Unknown action: ' + action.type);
         }
     }
 }

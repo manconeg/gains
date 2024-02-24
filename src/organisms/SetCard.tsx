@@ -13,8 +13,8 @@ export type SetParams = {
   weight: number | TrainingMaxWeight,
   setGroup: SetGroup,
   set: Set,
-  selected: boolean,
-  onStart: false | ((set: Set) => void),
+  onStart: ((set: Set) => void),
+  onEdit: ((set: Set) => void),
 }
 
 function calcWeight(max: number, percent: number) {
@@ -22,7 +22,7 @@ function calcWeight(max: number, percent: number) {
 }
 
 export function SetCard(params: SetParams) {
-  const { set, setGroup, selected, onStart } = params
+  const { set, setGroup, onStart, onEdit } = params
   const [isTrainingMax, setTrainingMax] = useState(typeof params.weight === "number")
   const [percent, setPercent] = useState(0)
   const [weight, setWeight] = useState(0)
@@ -63,7 +63,7 @@ export function SetCard(params: SetParams) {
         <PlateCalculator weight={weight} />
       </LiftCard.Content>
       <LiftCard.Action>
-        {onStart && <Button onPress={() => onStart(set)}>Start</Button>}
+        {set.complete ? <Button onPress={() => onEdit(set)}>Edit</Button>: <Button onPress={() => onStart(set)}>Start</Button>}
       </LiftCard.Action>
     </LiftCard>
   )

@@ -14,31 +14,21 @@ export default function App() {
   // const fabStyle = { [animateFrom]: 16 };
 
   return (
-    <View>
+    <>
       <ScrollView
         style={styles.container}
         contentContainerStyle={{ padding: 3 }}>
-        <View><Text style={styles.header}>TODAY</Text></View>
+        <Text style={styles.header}>TODAY</Text>
         <View style={styles.movement}>
-          {workouts.length ? [...workouts].sort((a, b) => b.complete ? -1 : 1).map(workout => <WorkoutCard key={workout.id} workout={workout} />) : <RestCard />}
+          {workouts.length ? [...workouts].sort((a, b) => b.complete ? -1 : 1).map(workout => <WorkoutCard key={workout.id} workout={workout}/>) : <RestCard />}
         </View>
         <Text style={styles.header}>THIS WEEK</Text>
         <MiniCalendar workouts={workouts} />
         <Text style={styles.header}>PROGRESS</Text>
         <ProgressGraph workouts={allWorkouts} />
+        <Stack.Screen options={{ title: 'In Thickness (and in health)', }} />
       </ScrollView>
-      {/* <AnimatedFAB
-        icon={'plus'}
-        label={'New Workout'}
-        extended={true}
-        onPress={() => router.navigate(`workout/new`)}
-        visible={true}
-        animateFrom={'right'}
-        // iconMode={'static'}
-        style={[styles.fabStyle]}
-      /> */}
-      <Stack.Screen options={{ title: 'In Thickness (and in health)', }} />
-    </View>
+    </>
   )
 }
 

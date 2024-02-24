@@ -7,10 +7,15 @@ import { useMemo } from 'react'
 import { StyleSheet, useColorScheme } from 'react-native'
 import { AnimatedFAB, Appbar, MD3DarkTheme, MD3LightTheme, Provider as PaperProvider, useTheme } from 'react-native-paper'
 import { TimerProvider } from '@/contexts/TimerContext'
+import { MD3Theme } from 'react-native-paper'
+import { View } from 'react-native'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 export default function HomeLayout() {
   const colorScheme = useColorScheme()
   const { theme } = useMaterial3Theme()
+
+
 
   const paperTheme = useMemo(
     () =>
@@ -18,29 +23,32 @@ export default function HomeLayout() {
     [colorScheme, theme]
   )
 
-  const styles = makeStyles()
+  const styles = makeStyles(paperTheme)
 
   return (
-    <PaperProvider theme={paperTheme}>
-      <WorkoutsProvider>
-        <TimerProvider>
-          <Stack
-            screenOptions={{
-              // headerStyle: {...styles.header, backgroundColor: paperTheme.colors.primaryContainer},
-              // headerTintColor: paperTheme.colors.primary,
-              // headerTitleStyle: {
-              //   // fontWeight: 'bold',
-              // },
-              header: (params) => (<Appbar.Header>
-                {params.back ? <Appbar.BackAction onPress={() => params.navigation.goBack()} /> : ''}
-                <Appbar.Content title={params.options.title} />
-                {/* <Appbar.Action icon="calendar" onPress={() => {}} />
-                  <Appbar.Action icon="magnify" onPress={() => {}} /> */}
-              </Appbar.Header>),
-              contentStyle: styles.container,
-            }} />
-          <LiftTimer />
-          {/* <AnimatedFAB
+    <SafeAreaProvider style={styles.backgroud}>
+      <PaperProvider theme={paperTheme}>
+        <WorkoutsProvider>
+          <TimerProvider>
+            {/* <View style={styles.backgroud}> */}
+            <Stack
+              screenOptions={{
+                // headerStyle: {...styles.header, backgroundColor: paperTheme.colors.primaryContainer},
+                // headerTintColor: paperTheme.colors.primary,
+                // headerTitleStyle: {
+                //   // fontWeight: 'bold',
+                // },
+                header: (params) => (<Appbar.Header>
+                  {params.back ? <Appbar.BackAction onPress={() => params.navigation.goBack()} /> : ''}
+                  <Appbar.Content title={params.options.title} />
+                  {/* <Appbar.Action icon="calendar" onPress={() => {}} />
+                    <Appbar.Action icon="magnify" onPress={() => {}} /> */}
+                </Appbar.Header>),
+                contentStyle: styles.container,
+              }} />
+            {/* </View> */}
+            <LiftTimer />
+            {/* <AnimatedFAB
             icon={'plus'}
             label={'Add set'}
             extended={true}
@@ -50,18 +58,20 @@ export default function HomeLayout() {
             // iconMode={'static'}
             style={[styles.fabStyle]}
           /> */}
-        </TimerProvider>
-      </WorkoutsProvider>
-      <StatusBar style="auto" />
-    </PaperProvider>)
+          </TimerProvider>
+        </WorkoutsProvider>
+        <StatusBar style="auto" />
+      </PaperProvider>
+    </SafeAreaProvider>)
 }
 
-function makeStyles() {
-  const theme = useTheme();
-
+function makeStyles(theme: MD3Theme) {
   return StyleSheet.create({
     header: {
       // borderBottomWidth: 0,
+    },
+    backgroud: {
+      backgroundColor: theme.colors.background,
     },
     container: {
       paddingHorizontal: 1,

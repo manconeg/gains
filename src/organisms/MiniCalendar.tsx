@@ -2,6 +2,7 @@ import { Workout } from '@/models';
 import { ChronoField, DayOfWeek, LocalDate, TemporalAdjusters } from '@js-joda/core';
 import { StyleSheet, View } from 'react-native';
 import { Card, Divider, Text, useTheme } from 'react-native-paper';
+import { Link } from 'expo-router';
 
 type MiniCalendarParams = {
     workouts: Workout[],
@@ -36,9 +37,11 @@ export function MiniCalendar({ workouts }: MiniCalendarParams) {
             </View>
             <View style={styles.week}>
                 {activities.map((workoutsOfDay, key) => <View key={key} style={styles.day}>
-                    {workoutsOfDay.length ? <Card style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-                        <Card.Content><Text>{workoutsOfDay.length}</Text></Card.Content>
-                    </Card> : null}
+                    <Link href='aniTest'>
+                        {workoutsOfDay.length ? <Card style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
+                            <Card.Content><Text>{workoutsOfDay.length}</Text></Card.Content>
+                        </Card> : null}
+                    </Link>
                 </View>)}
             </View>
         </View>

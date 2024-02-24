@@ -35,7 +35,7 @@ export default function Movement() {
   const trainingMaxPercent = .9
 
   const [trainingMax, setTrainingMax] = useState(maxLift * trainingMaxPercent)
- 
+
   const recordSet = (setGroup: SetGroup, mySet: Set, repsPerformed: number, weightPerformed: number) => {
     workoutsDispatch({
       type: WorkoutsActions.ADD_REPS,
@@ -49,49 +49,44 @@ export default function Movement() {
     })
   }
 
-  const startTimer = (set: Set, setGroup: SetGroup) => () => {
+  const startTimer = (set: Set, setGroup: SetGroup) => {
     timerDispatch({
       type: TimerActions.START_TIMER,
-      onComplete: (reps: number) => {
+      onTimerComplete: () => recordResult(set, setGroup),
+    })
+  }
+
+  const recordResult = (set: Set, setGroup: SetGroup) => {
+    timerDispatch({
+      type: TimerActions.RECORD_REPS,
+      initialReps: set.repsPerformed ? set.repsPerformed : set.reps,
+      onComplete: (reps: number, seconds: number) => {
         recordSet(setGroup, set, reps, set.percent * trainingMax)
         timerDispatch({ type: TimerActions.STOP_TIMER })
       },
-      active: true,
-      set: set,
     })
   }
 
   return (
-    <View>
-      <ScrollView style={styles.container} contentContainerStyle={{ padding: 3 }}>
-        <Stack.Screen options={{ title: movement.name, }} />
-        <LiftCard>
-          <LiftCard.Content>
-            <Text>Max {maxLift} [?]</Text>
-            <Text>Training Max {trainingMax} (@ {100 * trainingMaxPercent}%)</Text>
-          </LiftCard.Content>
-        </LiftCard>
-        <View>
-          <Text style={styles.header}>Progress</Text>
-          <Card>
-            <ProgressGraph workouts={workouts} movement={movement} />
-          </Card>
+    <ScrollView style={styles.container} contentContainerStyle={{ padding: 3 }}>
+      <Stack.Screen options={{ title: movement.name, }} />
+      <LiftCard>
+        <LiftCard.Content>
+          <Text>Max {maxLift} [?]</Text>
+          <Text>Training Max {trainingMax} (@ {100 * trainingMaxPercent}%)</Text>
+        </LiftCard.Content>
+      </LiftCard>
+      <Text style={styles.header}>Progress</Text>
+      <Card>
+        <ProgressGraph workouts={workouts} movement={movement} />
+      </Card>
+      {[...movement.setGroups].sort((setGroupA, setGroupB) => !setGroupB.sets.find(set => !set.complete) ? -1 : 1).map((setGroup, position) => (
+        <View key={setGroup.id}>
+          {!position && <Text style={styles.header}>Current Set</Text>}
+          {[...setGroup.sets].sort((setA, setB) => setB.complete ? -1 : 1).map((set, position) => <SetCard busy={!timerContext.active} onStart={() => startTimer(set, setGroup)} onEdit={() => recordResult(set, setGroup)} key={set.id} weight={{ max: movement.max }} set={set} setGroup={setGroup} />)}
         </View>
-        <View>
-          {/* {createSet &&
-            <View>
-              <Text style={styles.header}>New set</Text>
-              <SetCard onStart={createSet} selected={true} weight={{ max: movement.max }} />
-            </View>} */}
-          {[...movement.setGroups].sort((setGroupA, setGroupB) => !setGroupB.sets.find(set => !set.complete) ? -1 : 1).map((setGroup, position) => (
-            <View key={setGroup.id}>
-              {!position && <Text style={styles.header}>Current Set</Text>}
-              {[...setGroup.sets].sort((setA, setB) => setB.complete ? -1 : 1).map((set, position) => <SetCard onStart={!set.complete && !timerContext.active && startTimer(set, setGroup)} key={set.id} weight={{ max: movement.max }} set={set} setGroup={setGroup} selected={position == 0} />)}
-            </View>
-          ))}
-        </View>
-      </ScrollView>
-    </View>
+      ))}
+    </ScrollView>
   );
 }
 

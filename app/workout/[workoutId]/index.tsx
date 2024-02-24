@@ -1,5 +1,5 @@
 import { useWorkouts } from '@/contexts';
-import { MovementCard } from '@/organisms';
+import { WorkoutCard } from '@/organisms';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import { ScrollView, StyleSheet } from 'react-native';
 
@@ -15,7 +15,7 @@ export default function Workout() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ padding: 3 }}>
       <Stack.Screen options={{ title: `${workout.variation} ${workout.day} - ${workout.date.toString()}`, }} />
-      {workout.movements.map((movement, key) => <MovementCard key={key} workoutId={workout.id} movement={movement} />)}
+      <WorkoutCard key={workout.id} workout={workout} big={true} />
     </ScrollView>
   );
 }

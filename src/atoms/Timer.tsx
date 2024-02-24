@@ -8,16 +8,16 @@ function padStart(number: Number) {
     return String(number).padStart(2, '0')
 }
 
-export function Timer({ start, stop, direction, active }: { start: number, stop: number | false, direction: Direction, active: boolean }) {
+export function Timer({ start, stop, direction, reset }: { start: number, stop: number | false, direction: Direction, reset: boolean }) {
     const styles = makeStyles()
     const [secondsLeft, setSecondsLeft] = useState(start)
     useEffect(() => {
-        if (active) {
+        if (reset) {
             setSecondsLeft(start)
             const interval = setInterval(() => setSecondsLeft(secondsLeft => secondsLeft + direction), millisInSecond)
             return () => clearInterval(interval)
         }
-    }, [active])
+    }, [reset])
 
     return (
         <View style={{ flexDirection: "row", justifyContent: 'center' }}>

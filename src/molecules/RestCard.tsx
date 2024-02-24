@@ -1,4 +1,4 @@
-import { LiftCard } from "./LiftCard"
+import { LiftCard } from "./LiftCard/LiftCard"
 import { Text } from "react-native-paper"
 
 export function RestCard() {
