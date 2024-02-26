@@ -1,10 +1,8 @@
 import { Adjustable, Timer } from '@/atoms'
-import { Set } from '@/models/Workout'
+import { SetStatus, useTimer } from '@/contexts/TimerContext'
 import { useEffect, useState } from 'react'
 import { StyleSheet, View } from "react-native"
 import { Button, Card, Icon, Text } from "react-native-paper"
-import { useTimer } from '@/contexts/TimerContext'
-import { SetStatus } from '@/contexts/TimerContext'
 
 export function LiftTimer() {
     const { onTimerComplete, onRecordResult, state, initialReps, } = useTimer()
@@ -13,7 +11,7 @@ export function LiftTimer() {
     const [reset, resetTimer] = useState(true)
     const [repsComplete, setRepsComplete] = useState(initialReps)
 
-    useEffect(() => {resetTimer(true)}, [state])
+    useEffect(() => { resetTimer(true) }, [state])
 
     return state != SetStatus.NONE && (
         <Card style={styles.timer}>
@@ -24,7 +22,7 @@ export function LiftTimer() {
                         <Text>Lifting</Text>
                         <Timer start={0} stop={false} reset={reset} direction={timerDirection} />
                     </View>
-                    <Button onPress={() => {onTimerComplete()}}><Icon source="check" size={20} /></Button>
+                    <Button onPress={() => { onTimerComplete() }}><Icon source="check" size={20} /></Button>
                 </Card.Content>
             }
             {state == SetStatus.RECORDING &&

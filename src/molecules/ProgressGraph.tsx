@@ -46,7 +46,6 @@ let calculateData = (graphType: GraphType, workouts: Workout[], movement: Moveme
                     })
                 })
         })
-    console.log(data)
     return data
 }
 
@@ -58,13 +57,19 @@ export function ProgressGraph({
     const [data, setData] = useState(new Map())
 
     useEffect(() => {
+        // const start = Date.now();
         setData(calculateData(graphType, workouts, movement))
+        // const end = Date.now();
+        // console.log(`Filtering: ${end - start} ms`);   
     }, [graphType, workouts])
 
-    const dataSets: { data: GraphData, color: String }[] = useMemo(() => {
+    const dataSets: { data: GraphData, color: string }[] = useMemo(() => {
+        // const start = Date.now();
         let sets = Array.from(data.keys()).map(key => {
             return { data: data.get(key)!, color: 'blue', }
         });
+        // const end = Date.now();
+        // console.log(`Coloring: ${end - start} ms`);
         return sets
     }, [data])
 
@@ -73,7 +78,7 @@ export function ProgressGraph({
             {dataSets.length ? <>
                 <Graph dataSets={dataSets} />
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', }}>
-                    <Button disabled={graphType == GraphType.MONTH} onPress={() => setGraphType(GraphType.MONTH)}>Month</Button>
+                    <Button disabled={graphType == GraphType.MONTH} onPress={() => {console.log("push");setGraphType(GraphType.MONTH)}}>Month</Button>
                     <Button disabled={graphType == GraphType.THREE_MONTH} onPress={() => setGraphType(GraphType.THREE_MONTH)}>3 Months</Button>
                     <Button disabled={graphType == GraphType.YEAR} onPress={() => setGraphType(GraphType.YEAR)}>Year</Button>
                     <Button disabled={graphType == GraphType.ALL} onPress={() => setGraphType(GraphType.ALL)}>All</Button>

@@ -11,7 +11,7 @@ export type GraphParams = {
       date: LocalDate,
       value: number,
     }[],
-    color: String,
+    color: string,
   }[]
 }
 export function Graph({
@@ -29,6 +29,7 @@ export function Graph({
 
   const processedDataSets:Dataset[] = []
 
+  // const start = Date.now();
   dataSets.forEach(dataSet => {
     let dataSummary: number[] = []
     dataSet.data.sort((dataPointA, dataPointB) => dataPointA.date.toEpochDay() - dataPointB.date.toEpochDay()).forEach((dataPoint) => {
@@ -43,6 +44,8 @@ export function Graph({
 
     processedDataSets.push(processedDatSet)
   })
+  // const end = Date.now();
+  // console.debug(`Finalized: ${end - start} ms`);   
 
   if (!labels.size) {
     labels.add('Empty')

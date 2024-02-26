@@ -1,11 +1,14 @@
-import { getData } from '@/LoadCSV';
+// import { getData } from '@/LoadCSV';
+import { FileBasedWorkouts } from '@/data/FileBasedWorkouts';
 import { Workout } from '@/models';
 import { ChronoUnit, LocalDate } from '@js-joda/core';
 import * as Crypto from 'expo-crypto';
 import { produce } from 'immer';
 import { Dispatch, createContext, useContext, useEffect, useReducer } from 'react';
-import * as FileSystem from 'expo-file-system'
+import { Text } from 'react-native-paper';
+import { useQuery } from 'react-query';
 
+const fileBasedWorkouts = new FileBasedWorkouts();
 const WorkoutsContext = createContext<Workout[]>([]);
 const WorkoutsDispatchContext = createContext<Dispatch<WorkoutsAction>>(null);
 
@@ -24,15 +27,31 @@ export function useWorkoutsDispatch() {
 export function WorkoutsProvider({ children }: { children: React.ReactNode }) {
     const [workouts, dispatch] = useReducer(
         workoutsReducer,
-        initialWorkouts,
+        [],
     );
 
-    initialLoad(dispatch)
+    const { isLoading, error, data } = useQuery({
+        queryKey: ['initialLoad'],
+        queryFn: fileBasedWorkouts.getWorkouts,
+    })
+
+    if (error) {
+        console.log(error)
+    }
+
+    useEffect(() => {
+        if (data) {
+            dispatch({
+                type: WorkoutsActions.LOAD_WORKOUTS,
+                workouts: data,
+            })
+        }
+    }, [isLoading])
 
     return (
         <WorkoutsContext.Provider value={workouts}>
             <WorkoutsDispatchContext.Provider value={dispatch}>
-                {children}
+                {isLoading ? <Text>Loading</Text> : children}
             </WorkoutsDispatchContext.Provider>
         </WorkoutsContext.Provider>
     );
@@ -73,80 +92,38 @@ type AddRepsAction = {
     complete: boolean,
 }
 
-let loaded = false
-
-function initialLoad(dispatch: Dispatch<WorkoutsAction>) {
-    if (!loaded) {
-        console.log('Loading')
-        loaded = true
-        loadWorkouts().then(workoutsString => {
-            dispatch({
-                type: WorkoutsActions.LOAD_WORKOUTS,
-                workouts: JSON.parse(workoutsString, function (key, value) {
-                    if (typeof value === 'string') {
-                        try {
-                            let data = LocalDate.parse(value)
-                            return data
-                        } catch(err) {}
-                    }
-                    return value;
-                }),
-            })
-        }).catch(error => {
-            console.error(error)
-        })
-        // getData().then(workouts => {
-        //     dispatch({
-        //         type: WorkoutsActions.ADD_WORKOUTS,
-        //         workouts: workouts,
-        //     })
-        // })
-    }
-}
-
 function workoutsReducer(workouts: Workout[], action: WorkoutsAction) {
     const newWorkouts = (() => {
-         switch (action.type) {
-        case WorkoutsActions.ADD_REPS: {
-            return produce(workouts, draft => {
-                let set = draft.find(workout => workout.id === action.workoutId)
-                    ?.movements.find(movement => movement.id === action.movementId)
-                    ?.setGroups.find(setGroup => setGroup.id === action.setGroupId)
-                    ?.sets.find(set => set.id === action.setId)
+        switch (action.type) {
+            case WorkoutsActions.ADD_REPS: {
+                return produce(workouts, draft => {
+                    let set = draft.find(workout => workout.id === action.workoutId)
+                        ?.movements.find(movement => movement.id === action.movementId)
+                        ?.setGroups.find(setGroup => setGroup.id === action.setGroupId)
+                        ?.sets.find(set => set.id === action.setId)
 
-                if (set) {
-                    set.repsPerformed = action.repsPerformed
-                    set.weightPerformed = action.weightPerformed
-                    set.complete = action.complete
-                }
-            })
+                    if (set) {
+                        set.repsPerformed = action.repsPerformed
+                        set.weightPerformed = action.weightPerformed
+                        set.complete = action.complete
+                    }
+                })
+            }
+            case WorkoutsActions.ADD_WORKOUT: {
+                return [...workouts, action.workout]
+            }
+            case WorkoutsActions.ADD_WORKOUTS: {
+                return [...workouts, ...action.workouts]
+            }
+            case WorkoutsActions.LOAD_WORKOUTS: {
+                return [...action.workouts]
+            }
         }
-        case WorkoutsActions.ADD_WORKOUT: {
-            return [...workouts, action.workout]
-        }
-        case WorkoutsActions.ADD_WORKOUTS: {
-            return [...workouts, ...action.workouts]
-        }
-        case WorkoutsActions.LOAD_WORKOUTS: {
-            return [...action.workouts]
-        }
-    }})()
+    })()
 
-    persistWorkouts(newWorkouts)
+    fileBasedWorkouts.saveWorkouts(newWorkouts)
 
     return newWorkouts
-}
-
-function persistWorkouts(workouts: Workout[]) {
-    const uri = `${FileSystem.documentDirectory}save.json`
-    console.log(uri)
-    FileSystem.writeAsStringAsync(uri, JSON.stringify(workouts))
-}
-
-function loadWorkouts() {
-    const uri = `${FileSystem.documentDirectory}save.json`
-    console.log(`loading ${uri}`)
-    return FileSystem.readAsStringAsync(uri)
 }
 
 const initialWorkouts: Workout[] = [

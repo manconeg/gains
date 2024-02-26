@@ -4,7 +4,7 @@ import { MiniCalendar, WorkoutCard } from '@/organisms';
 import { LocalDate } from '@js-joda/core';
 import { Stack } from 'expo-router';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Text, useTheme } from 'react-native-paper';
+import { Text, useTheme, AnimatedFAB } from 'react-native-paper';
 
 export default function App() {
   const allWorkouts = useWorkouts();
@@ -28,6 +28,16 @@ export default function App() {
         <ProgressGraph workouts={allWorkouts} />
         <Stack.Screen options={{ title: 'In Thickness (and in health)', }} />
       </ScrollView>
+              {/* <AnimatedFAB
+                icon={'plus'}
+                label={'Add set'}
+                extended={true}
+                onPress={() => { }}
+                visible={true}
+                animateFrom={'right'}
+                // iconMode={'static'}
+                style={[styles.fabStyle]}
+              /> */}
     </>
   )
 }
