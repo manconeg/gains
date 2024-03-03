@@ -2,7 +2,7 @@ import { Dispatch, ReactNode, Reducer, createContext, useContext, useReducer } f
 
 export type Context = {}
 
-export function initializeContex<C, A>(initialContext: C, reducer: Reducer<any, any>): [() => C, () => Dispatch<A>, React.FunctionComponent<{ children: ReactNode[] }>] {
+export function initializeContex<C, A>(initialContext: C, reducer: Reducer<any, any>): [() => C, () => Dispatch<A>, React.FunctionComponent<{ children: ReactNode|ReactNode[] }>] {
 
     const Context = createContext<C>(initialContext);
     const DispatchContext = createContext<Dispatch<A>>(null);

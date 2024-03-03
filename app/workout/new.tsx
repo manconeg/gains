@@ -1,12 +1,32 @@
+import { FloatingAction } from '@/contexts';
 import { LiftCard } from '@/molecules';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { List, TextInput } from 'react-native-paper';
 import DateTimePicker, { DateType } from 'react-native-ui-datepicker';
+import { useAssets } from 'expo-asset';
+import workouts from '@/../assets/workouts/data.json'
+import * as FileSystem from 'expo-file-system'
+const images = require.context('../../assets/workouts', true, /\.png$/);
+
 
 export default function Workout() {
     const [date, setDate] = useState(new Date() as DateType)
     const [name, setName] = useState("")
+
+    let icons = new Map<string, string>()
+    
+    console.log(images.keys())
+
+    workouts.movements.forEach(element => {
+        console.log()
+                // const icon = useAssets([require(element.image)])
+            // icons.set(element.uuid, uri)
+    })
+
+    console.log(workouts)
+    // const lifts = JSON.parse(workouts[0].)
 
     return (
         <>
@@ -17,12 +37,28 @@ export default function Workout() {
                         value={name}
                         onChangeText={text => setName(text)}
                     />
+                    <List.Section title="Excercises">
+                        <List.Accordion
+                            title="Exercise"
+                            expanded={true}
+                            left={props => <List.Icon {...props} icon="folder" />}>
+                                {workouts.movements.map(movement =>
+                                <List.Item key={movement.uuid} title={movement.name}
+                                    left={props => <List.Icon {...props} icon={images(`./${movement.image}`)} />}/>)}
+                        </List.Accordion>
+                    </List.Section>
                     <DateTimePicker
                         mode="single"
                         date={date}
                         onChange={(params) => setDate(params.date)} />
                 </LiftCard.Content>
             </LiftCard>
+            <FloatingAction
+                icon={'plus'}
+                label={'Create'}
+                onPress={() => { router.navigate('workout/new') }}
+                visible={true}
+            />
         </>
     );
 }

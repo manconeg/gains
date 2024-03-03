@@ -1,37 +1,50 @@
 import { Context, initializeContex } from "./Context"
+import { useFocusEffect } from "expo-router";
 
-export enum DyanmicFABStatus {
-    HIDDEN, VISIBLE,
-}
-
-export enum DynamiccFABActions {
+export enum DynamicFABActions {
     CHANGE_TEXT,
+    CHANGE_PROPS,
 }
 
 type DynamicFABContext = Context & {
-    state: DyanmicFABStatus,
-    text: string,
+    visible: boolean,
+    label: string,
     icon: 'plus' | 'check',
+    onPress: () => void,
 }
 
 const initialContext: DynamicFABContext = {
-    state: DyanmicFABStatus.VISIBLE,
-    text: 'Add Workout',
+    visible: true,
+    label: 'Add Workout',
     icon: 'plus',
+    onPress: () => {},
 }
 
 type CHANGE_TEXT = {
-    type: DynamiccFABActions.CHANGE_TEXT,
-    text: string
+    type: DynamicFABActions.CHANGE_TEXT,
+    label: string,
 }
 
-type DynamicFABAction = CHANGE_TEXT
+type CHANGE_PROPS = {
+    type: DynamicFABActions.CHANGE_PROPS,
+    props: DynamicFABContext,
+}
 
+type DynamicFABAction = CHANGE_TEXT | CHANGE_PROPS
 
-export const [useDynamicFABContext, useDynamicFABDispatchContext, DynamicFABProvideer] = initializeContex<DynamicFABContext, DynamicFABAction>(initialContext, (context: DynamicFABContext, action: DynamicFABAction): DynamicFABContext => {
+export const [useDynamicFABContext, useDynamicFABDispatchContext, DynamicFABProvider] = initializeContex<DynamicFABContext, DynamicFABAction>(initialContext, (context: DynamicFABContext, action: DynamicFABAction): DynamicFABContext => {
     switch (action.type) {
-        case DynamiccFABActions.CHANGE_TEXT:
-            return context
+        case DynamicFABActions.CHANGE_TEXT:
+            return {...context, "label": action.label}
+        case DynamicFABActions.CHANGE_PROPS:
+            return action.props
     }
-    return context
 })
+
+export function FloatingAction(props: DynamicFABContext) {
+    const dispatch = useDynamicFABDispatchContext()
+    useFocusEffect(() => {    
+        dispatch({type: DynamicFABActions.CHANGE_PROPS, props: props})
+    })
+    return <></>
+}

@@ -1,0 +1,14 @@
+{
+    "movements": [
+        {
+            "uuid": "94903e48-373e-489a-b0bd-3a5f18cea0dzs",
+            "name": "Bench Press",
+            "image": "bench.png"
+        },
+        {
+            "uuid": "895ec452-d873-4668-a362-49f2fd5a7c15",
+            "name": "Deadlift",
+            "image": "deadlift.png"
+        }
+    ]
+}

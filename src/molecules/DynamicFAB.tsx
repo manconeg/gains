@@ -1,20 +1,20 @@
 import { router } from "expo-router";
 import { StyleSheet } from "react-native";
 import { AnimatedFAB, MD3Theme, useTheme } from "react-native-paper";
+import { useDynamicFABContext } from "@/contexts";
 
 export function DynamicFAB() {
     const theme = useTheme()
     const styles = makeStyles(theme)
+    const dynamicFABContext = useDynamicFABContext()
+
     return (
         <AnimatedFAB
-            icon={'plus'}
-            label={'Add Workout'}
             extended={true}
-            onPress={() => { router.navigate('workout/new') }}
-            visible={true}
             animateFrom={'right'}
             // iconMode={'static'}
             style={[styles.fabStyle]}
+            {...dynamicFABContext}
         />
     )
 }
