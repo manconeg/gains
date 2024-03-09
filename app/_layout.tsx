@@ -11,6 +11,7 @@ import { StyleSheet, useColorScheme } from 'react-native'
 import { Appbar, MD3DarkTheme, MD3LightTheme, MD3Theme, Provider as PaperProvider } from 'react-native-paper'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { GestureHandlerRootView, gestureHandlerRootHOC } from 'react-native-gesture-handler';
 
 const queryClient = new QueryClient()
 
@@ -26,7 +27,7 @@ export default function HomeLayout() {
 
   const styles = makeStyles(paperTheme)
 
-  return (
+  const Handler = gestureHandlerRootHOC(() => 
     <SafeAreaProvider style={styles.backgroud}>
       <QueryClientProvider client={queryClient}>
         <DynamicFABProvider>
@@ -57,6 +58,7 @@ export default function HomeLayout() {
         </DynamicFABProvider>
       </QueryClientProvider>
     </SafeAreaProvider>)
+    return <Handler />
 }
 
 function makeStyles(theme: MD3Theme) {

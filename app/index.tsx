@@ -13,7 +13,6 @@ export default function App() {
   const todayLocal = LocalDate.now()
   const workouts = allWorkouts.filter(workout => workout.date.isEqual(todayLocal));
   const styles = makeStyles();
-  // const fabStyle = { [animateFrom]: 16 };
 
   return (
     <>
@@ -53,11 +52,6 @@ function makeStyles() {
     },
     movement: {
 
-    },
-    fabStyle: {
-      bottom: 16,
-      right: 16,
-      position: 'absolute',
     },
   })
 }

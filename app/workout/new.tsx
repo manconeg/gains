@@ -5,9 +5,10 @@ import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { List, TextInput } from 'react-native-paper';
 import DateTimePicker, { DateType } from 'react-native-ui-datepicker';
-import { useAssets } from 'expo-asset';
 import workouts from '@/../assets/workouts/data.json'
-import * as FileSystem from 'expo-file-system'
+import { MiniCalendar } from '@/organisms';
+import { LocalDate } from '@js-joda/core';
+import { randomUUID } from 'expo-crypto';
 const images = require.context('../../assets/workouts', true, /\.png$/);
 
 
@@ -40,17 +41,41 @@ export default function Workout() {
                     <List.Section title="Excercises">
                         <List.Accordion
                             title="Exercise"
-                            expanded={true}
                             left={props => <List.Icon {...props} icon="folder" />}>
                                 {workouts.movements.map(movement =>
                                 <List.Item key={movement.uuid} title={movement.name}
                                     left={props => <List.Icon {...props} icon={images(`./${movement.image}`)} />}/>)}
                         </List.Accordion>
                     </List.Section>
-                    <DateTimePicker
+                    <MiniCalendar workouts={[{
+                        date: LocalDate.now().minusDays(0),
+                        id: randomUUID(),
+                        program: '',
+                        variation: '',
+                        day: '',
+                        movements: [],
+                        complete: false,
+                        },{
+                            date: LocalDate.now().minusDays(1),
+                            id: randomUUID(),
+                            program: '',
+                            variation: '',
+                            day: '',
+                            movements: [],
+                            complete: false,
+                            },{
+                                date: LocalDate.now().plusDays(1),
+                                id: randomUUID(),
+                                program: '',
+                                variation: '',
+                                day: '',
+                                movements: [],
+                                complete: false,
+                                }]}/>
+                    {/* <DateTimePicker
                         mode="single"
                         date={date}
-                        onChange={(params) => setDate(params.date)} />
+                        onChange={(params) => setDate(params.date)} /> */}
                 </LiftCard.Content>
             </LiftCard>
             <FloatingAction

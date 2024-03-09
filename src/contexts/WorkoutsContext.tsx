@@ -41,6 +41,7 @@ export function WorkoutsProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         if (data) {
+            console.log("got data")
             dispatch({
                 type: WorkoutsActions.LOAD_WORKOUTS,
                 workouts: data,

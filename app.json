@@ -41,5 +41,6 @@
       }
     }
   },
-  "name": "gains"
+  "name": "gains",
+  "scheme":"com.yoursite.yourapp"
 }

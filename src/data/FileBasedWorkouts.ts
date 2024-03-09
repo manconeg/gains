@@ -5,11 +5,9 @@ import { IWorkouts } from "./IWorkouts";
 
 export class FileBasedWorkouts implements IWorkouts {
     getWorkouts(): Promise<Workout[]> {
-        console.log('Loading')
-
         const uri = `${FileSystem.documentDirectory}save.json`
         console.log(`loading ${uri}`)
-        return FileSystem.readAsStringAsync(uri).then(workoutsString => {
+        return new Promise((resolve, reject) => FileSystem.readAsStringAsync(uri).then(workoutsString => {
             const parsedJson: Workout[] = JSON.parse(workoutsString, function (key, value) {
                 if (typeof value === 'string') {
                     try {
@@ -19,12 +17,12 @@ export class FileBasedWorkouts implements IWorkouts {
                 }
                 return value
             })
-            return parsedJson
-        })
+            resolve(parsedJson)
+        }).catch(() => reject([])))
     }
     saveWorkouts(workouts: Workout[]): void {
         const uri = `${FileSystem.documentDirectory}save.json`
-        console.log(uri)
+        console.log('saving', uri)
         FileSystem.writeAsStringAsync(uri, JSON.stringify(workouts))
     }
 }
